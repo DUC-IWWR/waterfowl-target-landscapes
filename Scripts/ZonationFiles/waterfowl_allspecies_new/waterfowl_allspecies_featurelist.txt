@@ -1,0 +1,2 @@
+"filename"
+../../../Data/DensityRasters/DuckDensity_Original7Species.tif

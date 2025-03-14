@@ -1,0 +1,4 @@
+"weight" "filename"
+30 ../../../Data/SnappedDensityRasters/Shorebirds/LBCU_2018_50.tif
+20 ../../../Data/SnappedDensityRasters/Shorebirds/MAGO_2018_50.tif
+19 ../../../Data/SnappedDensityRasters/Shorebirds/WILL_2018_50.tif

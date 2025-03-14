@@ -1,0 +1,8 @@
+"filename"
+../../../Data/SnappedDensityRasters/BWTE_snapped.tif
+../../../Data/SnappedDensityRasters/CANV_snapped.tif
+../../../Data/SnappedDensityRasters/GADW_snapped.tif
+../../../Data/SnappedDensityRasters/MALL_snapped.tif
+../../../Data/SnappedDensityRasters/NOPI_snapped.tif
+../../../Data/SnappedDensityRasters/NSHO_snapped.tif
+../../../Data/SnappedDensityRasters/REDH_snapped.tif

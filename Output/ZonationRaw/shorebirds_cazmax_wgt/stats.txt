@@ -1,0 +1,24 @@
+Arguments given: -hw --mode=CAZMAX --gui shorebirds_cazmax_wgt.z5 ../../../Output/ZonationRaw/shorebirds_cazmax_wgt
+Settings filename: shorebirds_cazmax_wgt.z5
+Feature list filename: C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Scripts\ZonationFiles\shorebirds_cazmax_wgt\shorebirds_cazmax_wgt_featurelist.txt
+Map dimensions (width * height): 2056*1666
+Number of grid cells in map (width * height): 3425296
+Number of grid cells in map with data: 855721
+Feature layer count: 3
+Positive weight feature count: 3
+Negative weight feature count: 0
+Zero weight feature count: 0
+Total number of pixels with data across features: 2567163
+Mean feature extent across study area: 97.12%
+Memory usage of feature data: 14.79MB
+Mean quantization error: 2.12265e-05%
+Time used to read and preprocess layer data: 5s
+Time used in prioritization: 2s
+Number of iterations: 14
+Final convergence level: 0.00730646%
+Area under curve: 0.757220
+Hierarchic mask level 0 minimum rank: 0.0
+Hierarchic mask level 1 minimum rank: 0.967647
+Total time used: 7s
+Number of errors: 0
+Number of warnings: 2

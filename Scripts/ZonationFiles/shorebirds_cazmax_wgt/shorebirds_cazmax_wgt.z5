@@ -1,0 +1,2 @@
+feature list file = shorebirds_cazmax_wgt_featurelist.txt
+hierarchic mask layer = ../../../Data/masks/PA_All_int.tif

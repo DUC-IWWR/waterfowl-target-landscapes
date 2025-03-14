@@ -1,0 +1,44 @@
+[2025-01-10 14:50:36.163] [info] Zonation 5 v2.1
+[2025-01-10 14:50:36.484] [info] Arguments given: --mode=CAZMAX --gui waterfowl_allspecies.z5 ../../../Output/ZonationRaw/waterfowl_allspecies
+[2025-01-10 14:50:36.499] [info] Using 16-bit quantization
+[2025-01-10 14:50:36.502] [info] Using 16 threads for computation
+[2025-01-10 14:50:36.515] [info] Loading project "waterfowl_allspecies.z5"
+[2025-01-10 14:50:36.528] [info] Using setting: feature list file = waterfowl_allspecies_featurelist.txt
+[2025-01-10 14:50:36.530] [info] Using default setting: curves output interval = 9.99999975e-05
+[2025-01-10 14:50:36.532] [info] Using default setting: max iterations = 500
+[2025-01-10 14:50:36.549] [info] Using default setting: mean ranking error threshold = 0.00999999978
+[2025-01-10 14:50:36.551] [info] Using default setting: smoothing factor = 0
+[2025-01-10 14:50:36.558] [info] Using default setting: stop on plateau = 0
+[2025-01-10 14:50:36.560] [info] Using default setting: zero mode = all
+[2025-01-10 14:50:36.562] [info] Using default setting: stop after preprocessing = 0
+[2025-01-10 14:50:36.562] [info] Using default setting: quantization error warning threshold = 20
+[2025-01-10 14:50:36.570] [info] Loading feature layer information from "C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Scripts\ZonationFiles\waterfowl_allspecies\waterfowl_allspecies_featurelist.txt"
+[2025-01-10 14:50:36.590] [info] Validating project
+[2025-01-10 14:50:36.643] [info] Reading layer data
+[2025-01-10 14:50:36.647] [info] Gathering data statistics
+[2025-01-10 14:50:36.952] [info] Map dimensions (width * height): 3284*2273
+[2025-01-10 14:50:36.953] [info] Number of grid cells in map (width * height): 7464532
+[2025-01-10 14:50:36.957] [info] Number of grid cells in map with data: 4284546
+[2025-01-10 14:50:36.963] [info] Feature layer count: 1
+[2025-01-10 14:50:36.967] [info] Positive weight feature count: 1
+[2025-01-10 14:50:36.972] [info] Negative weight feature count: 0
+[2025-01-10 14:50:36.978] [info] Zero weight feature count: 0
+[2025-01-10 14:50:36.983] [info] Total number of pixels with data across features: 4284546
+[2025-01-10 14:50:36.988] [info] Reading feature layers
+[2025-01-10 14:50:37.473] [info] Mean feature extent across study area: 100.00%
+[2025-01-10 14:50:37.475] [info] Memory usage of feature data: 57.24MB
+[2025-01-10 14:50:37.479] [info] Mean quantization error: 4.49092e-06%
+[2025-01-10 14:50:37.485] [info] Time used to read and preprocess layer data: 0s
+[2025-01-10 14:50:37.488] [info] Computing priority rank
+[2025-01-10 14:50:38.258] [info] Iteration 0, mean ranking error 0.0%, mean rank change 0.0%
+[2025-01-10 14:50:38.301] [info] Time used in prioritization: 0s
+[2025-01-10 14:50:38.305] [info] Number of iterations: 1
+[2025-01-10 14:50:38.310] [info] Final convergence level: 0.0%
+[2025-01-10 14:50:38.315] [info] Area under curve: 0.717329
+[2025-01-10 14:50:38.320] [info] Writing feature info
+[2025-01-10 14:50:38.324] [info] Writing feature curves
+[2025-01-10 14:50:38.381] [info] Writing priority rank map
+[2025-01-10 14:50:38.631] [info] Total time used: 2s
+[2025-01-10 14:50:38.634] [info] Number of errors: 0
+[2025-01-10 14:50:38.640] [info] Number of warnings: 0
+[2025-01-10 14:50:38.647] [info] Done

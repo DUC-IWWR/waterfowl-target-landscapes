@@ -1,0 +1,65 @@
+[2024-11-20 13:07:00.347] [info] Zonation 5 v2.1
+[2024-11-20 13:07:00.524] [info] Arguments given: -hw --mode=CAZMAX --gui landbirds_cazmax_wgt.z5 ../../../Output/ZonationRaw/landbirds_cazmax_wgt
+[2024-11-20 13:07:00.531] [info] Using 16-bit quantization
+[2024-11-20 13:07:00.542] [info] Using 16 threads for computation
+[2024-11-20 13:07:00.544] [info] Loading project "landbirds_cazmax_wgt.z5"
+[2024-11-20 13:07:00.547] [info] Using setting: feature list file = landbirds_cazmax_wgt_featurelist.txt
+[2024-11-20 13:07:00.549] [info] Using setting: hierarchic mask layer = ../../../Data/masks/PA_All_int.tif
+[2024-11-20 13:07:00.550] [info] Using default setting: curves output interval = 9.99999975e-05
+[2024-11-20 13:07:00.552] [info] Using default setting: max iterations = 500
+[2024-11-20 13:07:00.553] [info] Using default setting: mean ranking error threshold = 0.00999999978
+[2024-11-20 13:07:00.554] [info] Using default setting: smoothing factor = 0
+[2024-11-20 13:07:00.555] [info] Using default setting: stop on plateau = 0
+[2024-11-20 13:07:00.555] [info] Using default setting: zero mode = all
+[2024-11-20 13:07:00.556] [info] Using default setting: stop after preprocessing = 0
+[2024-11-20 13:07:00.556] [info] Using default setting: quantization error warning threshold = 20
+[2024-11-20 13:07:00.557] [info] Loading feature layer information from "C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Scripts\ZonationFiles\landbirds_cazmax_wgt\landbirds_cazmax_wgt_featurelist.txt"
+[2024-11-20 13:07:00.577] [info] Validating project
+[2024-11-20 13:07:00.648] [info] Reading layer data
+[2024-11-20 13:07:00.696] [info] Gathering data statistics
+[2024-11-20 13:07:02.947] [info] Map dimensions (width * height): 2056*1666
+[2024-11-20 13:07:02.949] [info] Number of grid cells in map (width * height): 3425296
+[2024-11-20 13:07:02.952] [info] Number of grid cells in map with data: 855721
+[2024-11-20 13:07:02.956] [info] Feature layer count: 15
+[2024-11-20 13:07:02.959] [info] Positive weight feature count: 15
+[2024-11-20 13:07:02.962] [info] Negative weight feature count: 0
+[2024-11-20 13:07:02.965] [info] Zero weight feature count: 0
+[2024-11-20 13:07:02.970] [info] Total number of pixels with data across features: 12835815
+[2024-11-20 13:07:02.972] [info] Reading feature layers
+[2024-11-20 13:07:06.208] [info] Mean feature extent across study area: 94.68%
+[2024-11-20 13:07:06.211] [info] Memory usage of feature data: 34.37MB
+[2024-11-20 13:07:06.214] [info] Mean quantization error: 0.0144266%
+[2024-11-20 13:07:06.218] [info] Reading hierarchic mask from C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Data\masks\PA_All_int.tif
+[2024-11-20 13:07:06.913] [warning] Hierarchic mask "C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Data\masks\PA_All_int.tif" contains 8 values in cells with no data in feature layers
+[2024-11-20 13:07:06.914] [warning] Hierarchic mask "C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Data\masks\PA_All_int.tif" misses values for 34928 cells with some data in feature layers, replacing missing values with zero
+[2024-11-20 13:07:06.922] [info] Time used to read and preprocess layer data: 6s
+[2024-11-20 13:07:06.924] [info] Computing priority rank
+[2024-11-20 13:07:07.105] [info] Iteration 0, mean ranking error 16.3855%, mean rank change 7.13296%
+[2024-11-20 13:07:07.257] [info] Iteration 1, mean ranking error 6.41421%, mean rank change 2.1225%
+[2024-11-20 13:07:07.412] [info] Iteration 2, mean ranking error 2.7279%, mean rank change 0.780637%
+[2024-11-20 13:07:07.572] [info] Iteration 3, mean ranking error 1.33605%, mean rank change 0.346308%
+[2024-11-20 13:07:07.722] [info] Iteration 4, mean ranking error 0.710570%, mean rank change 0.174045%
+[2024-11-20 13:07:07.874] [info] Iteration 5, mean ranking error 0.397161%, mean rank change 0.0941764%
+[2024-11-20 13:07:08.027] [info] Iteration 6, mean ranking error 0.231123%, mean rank change 0.0532838%
+[2024-11-20 13:07:08.178] [info] Iteration 7, mean ranking error 0.138791%, mean rank change 0.03123%
+[2024-11-20 13:07:08.332] [info] Iteration 8, mean ranking error 0.0858292%, mean rank change 0.0188358%
+[2024-11-20 13:07:08.493] [info] Iteration 9, mean ranking error 0.0546781%, mean rank change 0.0116348%
+[2024-11-20 13:07:08.649] [info] Iteration 10, mean ranking error 0.0355218%, mean rank change 0.00736383%
+[2024-11-20 13:07:08.802] [info] Iteration 11, mean ranking error 0.0235053%, mean rank change 0.00475254%
+[2024-11-20 13:07:08.957] [info] Iteration 12, mean ranking error 0.0158208%, mean rank change 0.00312217%
+[2024-11-20 13:07:09.110] [info] Iteration 13, mean ranking error 0.0107494%, mean rank change 0.00209466%
+[2024-11-20 13:07:09.264] [info] Iteration 14, mean ranking error 0.00738877%, mean rank change 0.00142885%
+[2024-11-20 13:07:09.283] [info] Time used in prioritization: 2s
+[2024-11-20 13:07:09.287] [info] Number of iterations: 15
+[2024-11-20 13:07:09.291] [info] Final convergence level: 0.00738877%
+[2024-11-20 13:07:09.296] [info] Area under curve: 0.712381
+[2024-11-20 13:07:09.300] [info] Finding hierarchic mask ranks
+[2024-11-20 13:07:09.305] [info] Hierarchic mask level 0 minimum rank: 0.0
+[2024-11-20 13:07:09.307] [info] Hierarchic mask level 1 minimum rank: 0.967647
+[2024-11-20 13:07:09.311] [info] Writing feature info
+[2024-11-20 13:07:09.325] [info] Writing feature curves
+[2024-11-20 13:07:09.441] [info] Writing priority rank map
+[2024-11-20 13:07:09.512] [info] Total time used: 9s
+[2024-11-20 13:07:09.516] [info] Number of errors: 0
+[2024-11-20 13:07:09.520] [info] Number of warnings: 2
+[2024-11-20 13:07:09.525] [info] Done

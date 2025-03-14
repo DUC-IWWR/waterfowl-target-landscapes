@@ -1,0 +1,1094 @@
+---
+title: "Caculate priority bins for Zonation output"
+author: "Barry Robinson"
+date: "January 9, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+#setup workspace and load data
+```{r}
+library(raster)
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas")
+#setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/BorealWF/BorealWF_out")
+
+#load raster from Zonation output and separate masked and un-masked scenarios
+nomask <- list.files(pattern = "rank.compressed", recursive = T)
+mask <- nomask[grep(pattern = "_M", nomask)]
+nomask <- setdiff(nomask, mask)
+mask <- lapply(mask, raster)
+nomask <- lapply(nomask, raster)
+
+#Run lines below only if ploygons have been created for some zonation scenarios
+#mask <- mask[(grepl(pattern = "CAZ", mask))]
+#nomask <- nomask[!(grepl(pattern = "landbird", nomask))]
+```
+
+Graph raw Zonation output maps
+```{r}
+library(raster)
+library(rgdal)
+library(ggplot2)
+library(ggspatial)
+#load PHJV polygon for reprojection
+phjv <- readOGR(dsn="C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/GIS/Shapefiles", layer = "phjv_boundary")
+rasters <- lapply(mask, projectRaster, crs = crs(phjv), method = "ngb")
+#rasters <- lapply(nomask, projectRaster, crs = crs(phjv), method = "ngb")
+#convert to dataframe, create factor variable for fill and remove rows with NAs
+rasters.df <- lapply(rasters,as.data.frame, xy=T)
+for(i in 1:length(rasters.df)) {
+  rasters.df[[i]]$fill <- rasters.df[[i]][,3]
+  rasters.df[[i]] <- rasters.df[[i]][!is.na(rasters.df[[i]]$fill),]
+}
+
+names(rasters.df) <- c("lb", "mb", "mb.caz", "sb", "wf", "ab", "ab.caz")
+
+#import protected areas raster
+pa <- raster("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas/input_layers/ProtectedAreas/PA_All.tif")
+#change pa raster to polygon and reproject
+pa <- rasterToPolygons(pa, fun = function(x) {x==1}, dissolve = T)
+pa <- spTransform(pa, crs(phjv))
+pa_df <- df_spatial(pa)
+
+#Plot rasters
+#create  blank ggplot theme and define legend parameters
+theme_opts <- list(theme(panel.grid.minor = element_blank(),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.background = element_rect(fill="white"),
+                         panel.border = element_blank(),
+                         # axis.line = element_blank(),
+                         # axis.text.x = element_blank(),
+                         # axis.text.y = element_blank(),
+                         # axis.ticks = element_blank(),
+                         # axis.title.x = element_blank(),
+                         # axis.title.y = element_blank(),
+                         legend.position = c(0.85, 0.7),
+                         legend.text = element_text(size = 16),
+                         legend.title = element_text(size = 20),
+                         legend.key.size = unit(0.75, "cm"),
+                         legend.key.width = unit(0.75, "cm"),
+                         legend.background = element_rect(colour = "black",size = 1),
+                         legend.box.margin = margin(0.5,0.5,0.5,0.5),
+                         legend.spacing.y = unit(2, "pt")))
+
+#determine aspect ratio
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/GIS")
+aci <- raster("Rasters/aci800m_2018.tif")
+#clip aci with phjv polygon and any bird model (bird models don't extend all the way to eastern border of PHJV)
+aci <- projectRaster(from = aci, crs = crs(phjv), method = "ngb")
+aci <- crop(aci,phjv)
+aci <- mask(aci,phjv)
+asratio <- dim(aci)[2]/dim(aci)[1]
+w <- 13.333
+h <- w/asratio
+rm(aci)
+
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+
+#Plot LANDBIRD priority areas
+ggplot() +
+  geom_raster(data = rasters.df[["lb"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("LB_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot MARSHBIRDS (ABF) priority areas
+ggplot() +
+  geom_raster(data = rasters.df[["mb"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("MB_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot MARSHBIRDS (CAZ) priority areas
+ggplot() +
+  geom_raster(data = rasters.df[["mb.caz"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("MB.caz_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot SHOREBIRDS priority areas
+ggplot() +
+  geom_raster(data = rasters.df[["sb"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("SB_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot WATERFOWL priority areas
+ggplot() +
+  geom_raster(data = rasters.df[["wf"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("WF_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot ALL BIRDS priority areas (ABF)
+ggplot() +
+  geom_raster(data = rasters.df[["ab"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("AB_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot ALL BIRDS priority areas (CAZ)
+ggplot() +
+  geom_raster(data = rasters.df[["ab.caz"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pa_df, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  scale_alpha_manual(name = "Conservation value",
+                     values = c("1" = 0.65),
+                     labels = c("Existing protected areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = c("1" = "dashed"),
+                        labels = c("Existing protected areas")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("AB.caz_Raster.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#ALL BIRDS with Priority Places Polygons
+#import priority places polygon and convert to DF
+pp <- readOGR(dsn = "C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/GIS/Shapefiles", layer = "Prairie_Priority_Places_2018")
+pp <- spTransform(pp, crs(phjv))
+pp_df <- df_spatial(pp)
+pp_df$feature_id <- factor(0, levels = c(0,1))
+
+#combine with Protected Areas Polygons
+polygon <- rbind(pa_df[,1:5], pp_df[,1:5])
+
+#define alpha and line for each polygon type
+alpha <- c("0" = 0.15, "1" = 0.65)
+line <- c("0" = "solid", "1" = "dashed")
+size <- c("0" = 1, "1" = 0.3)
+
+ggplot() +
+  geom_raster(data = rasters.df[["ab"]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id), size = factor(feature_id)),
+                colour = "black", fill = "black") +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+   scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "Priority places")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "Priority places")) +
+  scale_size_manual(name = "Conservation value",
+                        values = size,
+                        labels = c("Existing protected areas", "Priority places")) +
+  labs(fill = "Relative priority") +
+  theme_opts
+ggsave("AB_Raster_PP.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#ALL-BIRD with no PA mask, overlaid by Prairie NWA units
+pnwa <- readOGR(dsn = "C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/GIS/Shapefiles/NWAs", layer = "ECCC_CWS_PrairieNWA")
+pnwa <- spTransform(pnwa, crs(phjv))
+pnwa_df <- df_spatial(pnwa)
+
+ggplot() +
+  geom_raster(data = rasters.df[[1]], aes(x=x, y=y, fill = fill)) +
+  geom_polypath(data = pnwa_df, aes(x=x, y=y, group = piece_id),
+                colour = "black", fill = NA, linetype = "solid") +
+  scale_fill_distiller(type = "seq",
+                       palette = "RdYlBu",
+                       aesthetics = c("colour", "fill"),
+                       direction = -1,
+                       guide = "colourbar") +
+  #  scale_alpha_manual(name = "Conservation value",
+  #                    values = alpha,
+  #                    labels = c("Existing protected areas", "Priority places")) +
+  # scale_linetype_manual(name = "Conservation value",
+  #                       values = line,
+  #                       labels = c("Existing protected areas", "Priority places")) +
+  # scale_size_manual(name = "Conservation value",
+  #                       values = size,
+  #                       labels = c("Existing protected areas", "Priority places")) +
+  labs(fill = "Relative priority") +
+  coord_cartesian(xlim = c(-325000, -300000), ylim = c(1175000, 1200000)) +
+  # xlim(-350000, -200000) +
+  # ylim(1150000, 1250000) +
+  theme_opts
+ggsave("AB_Raster_PP.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+```
+
+Reclassify rasters without PA mask into bins
+```{r}
+#create directory for reclassified rasters
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/")
+dir.create("ReclassRasters", showWarnings = F)
+setwd(file.path(getwd(),"ReclassRasters"))
+
+#define reclass table and reclassify
+rcl <- matrix(data = c(0.00,0.80,0.85,0.90,0.95,0.80,0.85,0.90,0.95,1.00,1,2,3,4,5), 
+              nrow=5, ncol=3)
+#apply reclass table
+nomask <- lapply(nomask, 
+                 function(x) {
+                   return(reclassify(x = x, rcl = rcl, filename = paste0(names(x),"_reclass.tif")))
+                   })
+```
+
+Reclassify rasters with PA mask into bins
+```{r}
+#create directory for reclassified rasters
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/")
+#setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/BorealWF/BorealWF_out")
+dir.create("ReclassRasters", showWarnings = F)
+setwd(file.path(getwd(),"ReclassRasters"))
+
+#define reclass table and reclassify
+rcl <- matrix(data = c(0.00,0.80,0.85,0.90,0.95,0.80,0.85,0.90,0.95,1.00,1,2,3,4,5), 
+              nrow=5, ncol=3)
+#load PA raster and change PAs to NA
+pa <- raster("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas/input_layers/ProtectedAreas/PA_All.tif")
+#pa <- raster("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/BorealWF/input_layers/ProtectedAreas/CPCAD_extent_mask_rev.tif")
+
+mask <- stack(mask)
+mask[which(pa[]==1)] <- NA
+
+#rescale values
+mask <- mask/max(mask[], na.rm=T)
+
+#reclassify into bins
+mask <- unstack(mask)
+mask <- lapply(mask, 
+                 function(x) {
+                   return(reclassify(x = x, rcl = rcl, filename = paste0(names(x),"_reclass.tif")))
+                   })
+```
+
+Create various priority areas polygons
+```{r}
+library(raster)
+library(rgdal)
+library(igraph)
+#load reclassified Zonation output rasters
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/ReclassRasters")
+#setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/BorealWF/BorealWF_out/ReclassRasters")
+rasters <- lapply(list.files(pattern = "tif"), raster) 
+
+#Run line below if you want to create polygons only for specific rasters (change pattern as appropriate)
+#rasters <- lapply(list.files(pattern = "CAZ"), raster)
+
+#create function to calculate polygons for multiple bins (0.8,0.85,0.9,0.95)
+calcPoly <- function(x) {
+  require(raster)
+  require(rgdal)
+  require(igraph)
+  setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriorityAreasPolygons")
+  #setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/BorealWF/BorealWF_out/PriorityAreasPolygons")
+  #define file prefix
+  name = sub(pattern = ".rank.compressed_reclass", replace = "", names(x))
+  
+  #95% quantile
+  q95 = x
+  q95[which(q95[]<5)] <- NA
+  q95[which(q95[]==5)] <- 1
+  #remove isolated clumps of pixels (all clumps with < 25 pixels)
+  clump = clump(q95)
+  clump25 = data.frame(freq(clump))
+  clump25 = clump25[clump25$count >=25, ]
+  clump25 = clump25$value
+  q95[!(clump %in% clump25)] <- NA
+  q95 = rasterToPolygons(q95, dissolve = T)
+  file = paste0(name,"_q95")
+  writeOGR(q95, dsn = getwd(), layer = file, driver = "ESRI Shapefile")
+  
+  #90% quantile
+  q90 = x
+  q90[which(q90[]<4)] <- NA
+  q90[which(q90[]>=4)] <- 1
+  #remove isolated clumps of pixels (all clumps with < 25 pixels)
+  clump = clump(q90)
+  clump25 = data.frame(freq(clump))
+  clump25 = clump25[clump25$count >=25, ]
+  clump25 = clump25$value
+  q90[!(clump %in% clump25)] <- NA
+  q90 = rasterToPolygons(q90, dissolve = T)
+  file = paste0(name,"_q90")
+  writeOGR(q90, dsn = getwd(), layer = file, driver = "ESRI Shapefile")
+  
+  #85% quantile
+  q85 = x
+  q85[which(q85[]<3)] <- NA
+  q85[which(q85[]>=3)] <- 1
+  #remove isolated clumps of pixels (all clumps with < 25 pixels)
+  clump = clump(q85)
+  clump25 = data.frame(freq(clump))
+  clump25 = clump25[clump25$count >=25, ]
+  clump25 = clump25$value
+  q85[!(clump %in% clump25)] <- NA
+  q85 = rasterToPolygons(q85, dissolve = T)
+  file = paste0(name,"_q85")
+  writeOGR(q85, dsn = getwd(), layer = file, driver = "ESRI Shapefile")
+  
+  #80% quantile
+  q80 = x
+  q80[which(q80[]<2)] <- NA
+  q80[which(q80[]>=2)] <- 1
+  #remove isolated clumps of pixels (all clumps with < 25 pixels)
+  clump = clump(q80)
+  clump25 = data.frame(freq(clump))
+  clump25 = clump25[clump25$count >=25, ]
+  clump25 = clump25$value
+  q80[!(clump %in% clump25)] <- NA
+  q80 = rasterToPolygons(q80, dissolve = T)
+  file = paste0(name,"_q80")
+  writeOGR(q80, dsn = getwd(), layer = file, driver = "ESRI Shapefile")
+  
+  #consolidate results
+  list = list(q95,q90,q85,q80)
+  names = paste(name,c("q95","q90","q85","q80"), sep="_")
+  names(list) = names
+  return(list)
+}
+
+#set up clusters for multi-core processing
+library(parallel)
+cl <- makeCluster(min(length(rasters),detectCores()-1)) 
+clusterEvalQ(cl, {
+  library(raster)
+  library(rgdal)
+  library(igraph)
+  }) #load packages in cluster
+clusterExport(cl,c("rasters","calcPoly")) #move required objects to the cluster
+
+#run reclassify in parallel
+polys <- parLapply(cl=cl, X=rasters, fun=calcPoly)
+stopCluster(cl)
+```
+
+
+Create high resolution maps of priority areas polygons (ggplot2; cannot fill polygons with hash)
+```{r}
+library(raster)
+library(rgdal)
+library(ggplot2)
+library(ggspatial)
+
+#import aci habitat raster
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/GIS")
+aci <- raster("Rasters/aci800m_2018.tif")
+#clip aci with phjv polygon and any bird model (bird models don't extend all the way to eastern border of PHJV)
+phjv <- readOGR(dsn=file.path(getwd(),"Shapefiles"), layer = "phjv_boundary")
+aci <- projectRaster(from = aci, crs = crs(phjv), method = "ngb")
+aci <- crop(aci,phjv)
+aci <- mask(aci,phjv)
+
+#import protected areas raster
+pa <- raster("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas/input_layers/ProtectedAreas/PA_All.tif")
+#change pa raster to polygon and reproject
+pa <- rasterToPolygons(pa, fun = function(x) {x==1}, dissolve = T)
+pa <- spTransform(pa, crs(phjv))
+pa_df <- df_spatial(pa)
+
+#convert to dataframe
+aci_df <- as.data.frame(aci, xy=T)
+#create factor variables for fill and remove NAs
+aci_df$fill <- factor(aci_df$aci800m_2018)
+aci_df <- aci_df[!is.na(aci_df$fill),]
+
+#load priority areas polygons, reproject, and convert to dataframe for plotting
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriorityAreasPolygons")
+#LANDBIRDS
+lb <- readOGR(dsn=getwd(), layer="X1_Landbirds.ABF_M_q80")
+lb <- spTransform(lb, crs(phjv))
+lb_df <- df_spatial(lb)
+
+#SHOREBIRDS
+sb <- readOGR(dsn=getwd(), layer="X3_Shorebirds.ABF_M_q80")
+sb<- spTransform(sb, crs(phjv))
+sb_df <- df_spatial(sb)
+
+#MARSHBIRDS (import both CAZ and ABF versions)
+mb <- readOGR(dsn=getwd(), layer="X2_Marshbirds.ABF_M_q80")
+mb <- spTransform(mb, crs(phjv))
+mb_df <- df_spatial(mb)
+mb.caz <- readOGR(dsn=getwd(), layer="X2_Marshbirds_CAZ.CAZ_M_q80")
+mb.caz <- spTransform(mb.caz, crs(phjv))
+mb.caz_df <- df_spatial(mb.caz)
+
+#WATERFOWL
+wf <- readOGR(dsn=getwd(), layer="X4_Waterfowl.ABF_M_q80")
+wf<- spTransform(wf, crs(phjv))
+wf_df <- df_spatial(wf)
+
+#ALL BIRDS (import both CAZ and ABF versions)
+ab <- readOGR(dsn=getwd(), layer="X5_Allbirds.ABF_M_q80")
+ab<- spTransform(ab, crs(phjv))
+ab_df <- df_spatial(ab)
+ab.caz <- readOGR(dsn=getwd(), layer="X5_Allbirds_CAZ.CAZ_M_q80")
+ab.caz<- spTransform(ab.caz, crs(phjv))
+ab.caz_df <- df_spatial(ab.caz)
+
+#define fill for habitat type, and alpha and linetype for polygons
+habcol <- c("1"="#0070FF", "2"="#000000","3"="#B2B2B2","5"="#98E600",
+            "6"="#73DFFF","7"="#BA8841","8"="#FFEBBE", "9"="#267300") 
+alpha <- c("0" = 0.35, "1" = 0.65)
+line <- c("0" = "solid", "1" = "dashed")
+
+#create  blank ggplot theme and define legend parameters
+theme_opts <- list(theme(panel.grid.minor = element_blank(),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.background = element_rect(fill="white"),
+                         panel.border = element_blank(),
+                         axis.line = element_blank(),
+                         axis.text.x = element_blank(),
+                         axis.text.y = element_blank(),
+                         axis.ticks = element_blank(),
+                         axis.title.x = element_blank(),
+                         axis.title.y = element_blank(),
+                         legend.position = c(0.85, 0.7),
+                         legend.text = element_text(size = 16),
+                         legend.title = element_text(size = 20),
+                         legend.key.size = unit(0.75, "cm"),
+                         legend.key.width = unit(0.75, "cm"),
+                         legend.background = element_rect(colour = "black",size = 1),
+                         legend.box.margin = margin(0.5,0.5,0.5,0.5),
+                         legend.spacing.y = unit(0, "pt")))
+
+#determine aspect ratio
+asratio <- dim(aci)[2]/dim(aci)[1]
+w <- 13.333
+h <- w/asratio
+
+#Plot LANDBIRD priority areas
+#merge pa with lb
+polygon <- rbind(pa_df[,1:5], lb_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+tiff("LB_PriorityAreas.tiff", width = w, height = h, units = 'in', res = 1200)
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "Landbird priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "Landbird priority areas")) +
+  theme_opts
+dev.off()
+
+#Plot SHOREBIRD priority areas
+#merge pa with lb
+polygon <- rbind(pa_df[,1:5], sb_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+tiff("SB_PriorityAreas.tiff", width = w, height = h, units = 'in', res = 1200)
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "Shorebird priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "Shorebird priority areas")) +
+  guides(fill = guide_legend(order = 1),
+         alpha = guide_legend(order = 2),
+         linetype = guide_legend(order = 2)) +
+  theme_opts
+dev.off()
+
+#Plot MARCHBIRD priority areas
+#ABF
+#merge pa with mb
+polygon <- rbind(pa_df[,1:5], mb_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+tiff("MB_PriorityAreas.tiff", width = w, height = h, units = 'in', res = 1200)
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "Marshbird priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "Marshbird priority areas")) +
+  theme_opts
+dev.off()
+
+#CAZ
+#merge pa with mb
+polygon <- rbind(pa_df[,1:5], mb.caz_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+tiff("MB_PriorityAreas_CAZ.tiff", width = w, height = h, units = 'in', res = 1200)
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "Marshbird priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "Marshbird priority areas")) +
+  theme_opts
+dev.off()
+
+#Plot WATERFOWL priority areas
+#merge pa with wf
+polygon <- rbind(pa_df[,1:5], wf_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "Waterfowl priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "Waterfowl priority areas")) +
+  guides(fill = guide_legend(order = 1),
+         alpha = guide_legend(order = 2),
+         linetype = guide_legend(order = 2)) +
+  theme_opts
+ggsave("WF_PriorityAreas.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#Plot ALL BIRDS priority areas
+#ABF
+#merge pa with ab
+polygon <- rbind(pa_df[,1:5], ab_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "All-bird priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "All-bird priority areas")) +
+  guides(fill = guide_legend(order = 1),
+         alpha = guide_legend(order = 2),
+         linetype = guide_legend(order = 2)) +
+  theme_opts
+ggsave("AB_PriorityAreas.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+
+#CAZ
+#merge pa with ab
+polygon <- rbind(pa_df[,1:5], ab.caz_df[,1:5])
+#export tif
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps")
+ggplot() +
+  geom_raster(data = aci_df, aes(x=x, y=y, fill = factor(fill))) +
+  geom_polypath(data = polygon, aes(x=x, y=y, group = piece_id, alpha = factor(feature_id), linetype = factor(feature_id)),
+                colour = "black", fill = "black", size = 0.3) +
+  scale_fill_manual(name = "Habitat type",
+                    values = habcol, 
+                    labels = c("Water", "Barren", "Urban", "Shrub",
+                               "Wetland","Grassland","Cropland", "Forest"),
+                    guide = "legend",
+                    na.translate=FALSE,
+                    aesthetics = c("colour", "fill")) +
+  scale_alpha_manual(name = "Conservation value",
+                     values = alpha,
+                     labels = c("Existing protected areas", "All-bird priority areas")) +
+  scale_linetype_manual(name = "Conservation value",
+                        values = line,
+                        labels = c("Existing protected areas", "All-bird priority areas")) +
+  guides(fill = guide_legend(order = 1),
+         alpha = guide_legend(order = 2),
+         linetype = guide_legend(order = 2)) +
+  theme_opts
+ggsave("AB.caz_PriorityAreas.tiff", device = "tiff", width = w, height = h, units = 'in', dpi = 1200)
+```
+
+<!-- Create high resolution maps of priority areas polygons (base plot; cannot make polygons with holes) -->
+<!-- ```{r} -->
+<!-- library(HatchedPolygons) -->
+<!-- library(dplyr) -->
+<!-- library(sp) -->
+<!-- library(sf) -->
+<!-- library(raster) -->
+<!-- library(rgdal) -->
+<!-- #import aci habitat layer and clip with PHJV boundary -->
+<!-- setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Temp/") -->
+<!-- aci <- raster("aci800m_2018.tif") -->
+<!-- phjv <- readOGR(dsn=getwd(), layer = "phjv_boundary") -->
+<!-- phjv <- spTransform(phjv,crs(aci)) -->
+<!-- aci <- mask(aci,phjv) -->
+
+<!-- #load priority areas polygons -->
+<!-- setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriorityAreasPolygons") -->
+<!-- lb <- readOGR(dsn=getwd(), layer="X1_Landbirds.ABF_M_q80") -->
+<!-- sb <- readOGR(dsn=getwd(), layer="X3_Shorebirds.ABF_M_q80") -->
+<!-- mb <- readOGR(dsn=getwd(), layer="X2_Marshbirds.ABF_M_q80") -->
+<!-- wf <- readOGR(dsn=getwd(), layer="X4_Waterfowl.ABF_M_q80") -->
+
+<!-- #create hatch to fill polygons, excluding holes -->
+<!-- hatch <- hatched.SpatialPolygons(lb, density = 20, angle = 45) -->
+
+<!-- #define colours for each habitat type -->
+<!-- habCol <- c("#0070FF","#000000","#B2B2B2","#98E600","#73DFFF","#BA8841","#FFEBBE", "#267300") #habitas in alphabetical order -->
+
+<!-- #Plot Landbird priority areas -->
+<!-- setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/PriortyAreasMaps") -->
+<!-- tiff("LB_PriorityAreas.tiff", width = 11, height = 8.5, units = 'in', res = 600) -->
+<!-- par(xpd = FALSE) -->
+<!-- plot(aci, legend = F, col=habCol, xaxt = 'n', yaxt = 'n', maxpixels = ncell(aci)) -->
+<!-- par(xpd = TRUE) -->
+<!-- legend(x=-200000, y=1600000, -->
+<!--        legend = c("Water", "Barren", "Urban", "Shrub", "Wetland", "Grassland", -->
+<!--                   "Cropland", "Forest", "Landbird priority areas"), -->
+<!--        fill=c(habCol,"black"), -->
+<!--        density=c(NA,NA,NA,NA,NA,NA,NA,NA,20), -->
+<!--        horiz = F, -->
+<!--        xjust = 0.5,  -->
+<!--        yjust = 0.5) -->
+<!-- plot(lb, pbg="transparent", col="black", add=T) -->
+<!-- dev.off() -->
+<!-- ``` -->
+
+Import and manipulate data for efficiency plots (proportion of population conserved in relation to proportion of land protected)
+```{r}
+#Before efficiency plots can be created, must determine the proportion of the landscape that is within the protected areas mask
+library(raster)
+library(ggplot2)
+#import protected areas raster and any zonation output raster to represent study area size
+pa <- raster("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas/input_layers/ProtectedAreas/PA_All.tif")
+sa <- raster("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas/1_Landbirds/1_Landbirds_out/1_Landbirds.ABF_M.rank.compressed.tif")
+#estimate proportion of study area within existing protected areas (number of pixels in pa raster that == 1 divided by number of non-NA pixels in sa)
+propPA <- sum(pa[], na.rm=T)/sum(!is.na(sa[]))
+
+#import tables for efficiency plots
+setwd("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas")
+#import landbird output table
+lb <- read.table("1_Landbirds/1_Landbirds_out/1_Landbirds.ABF_M.curves.txt")
+#import marshbirds output table with ABF
+mb <- read.table("2_Marshbirds/2_Marshbirds_out/2_Marshbirds.ABF_M.curves.txt")
+#import marshbirds output table with CAZ
+#mb <- read.table("2_Marshbirds_CAZ/2_Marshbirds_CAZ_out/2_Marshbirds_CAZ.CAZ_M.curves.txt")
+#import shorebirds output table
+sb <- read.table("3_Shorebirds/3_Shorebirds_out/3_Shorebirds.ABF_M.curves.txt")
+#import waterfowl output table
+wf <- read.table("4_Waterfowl/4_Waterfowl_out/4_Waterfowl.ABF_M.curves.txt")
+#import allbirds output table with ABF
+ab <- read.table("5_Allbirds/5_Allbirds_out/5_Allbirds.ABF_M.curves.txt")
+#import allbirds output table with caz
+ab.caz <- read.table("5_Allbirds_CAZ/5_Allbirds_CAZ_out/5_Allbirds_CAZ.CAZ_M.curves.txt")
+
+#Column 8 onwards represents all of the species input into Zonation. Order of species matches order in .spp files.
+#import any .spp file to get order (should be the same for all bird groups)
+spp <- read.table("1_Landbirds/1_Landbirds.spp")
+#extract species code from last column
+keywords <- ".*(Landbirds/|Marshbirds/|Shorebirds/|Waterfowl/)"
+sp <- sub(keywords, "", spp$V6)
+sp <- toupper(substr(sp, start=1, stop=4))
+#update column names
+colnames(lb)[8:ncol(lb)] <- sp
+colnames(mb)[8:ncol(mb)] <- sp
+colnames(sb)[8:ncol(sb)] <- sp
+colnames(wf)[8:ncol(wf)] <- sp
+colnames(ab)[8:ncol(ab)] <- sp
+colnames(ab.caz)[8:ncol(ab.caz)] <- sp
+
+#import species weights table so species can be grouped by conservation concern
+w <- read.csv("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/SpeciesWeights2.0.csv")
+#group into low (9-13), medium (14-19), and high (40) Priority
+w$Priority <- NA
+w$Priority[w$weight_new<14] <- "low"
+w$Priority[w$weight_new>=14 & w$weight_new<30] <- "medium"
+w$Priority[w$weight_new>=30] <- "high"
+
+#combine bird group tables into a list so groups can be processed simultaneously
+list <- list(lb, mb, sb, wf, ab, ab.caz)
+names(list) <- c("Landbirds", "Marshbirds", "Shorebirds", "Waterfowl", "All-birds", "All-birds.CAZ")
+
+#The first column (V1) represnts proportion of lastscape lost (not conserved). Create a new column representing proportion of landscape conserved (1-V1) and modify to account for the proportion of the landscape that is already protected
+lb$propCon <- 1-lb$V1-propPA
+
+#extract data from the row that represents 80% removal of habitat (top 20%)
+test <- abs(0.2-lb$propCon)
+list20 <- lapply(list, 
+                 FUN = function(x) {
+                                    tmp = x[which(test==min(test)),8:ncol(x)]
+                                    tmp = as.data.frame(t(tmp))
+                                    colnames(tmp) = "PropPop"
+                                    tmp$species = rownames(tmp)
+                                    tmp = merge(tmp, w)
+                                    tmp$Priority = factor(tmp$Priority, levels = c("high", "medium", "low"))
+                                    tmp = tmp[order(tmp$Priority, tmp$species),]
+                                    tmp$species = factor(tmp$species, levels = tmp$species)
+                                    return(tmp)
+                                  })
+
+lb20 <- list20[["Landbirds"]]
+lb20 <- lb20[lb20$BirdGroup=="Landbird",]
+
+mb20 <- list20[["Marshbirds"]]
+mb20 <- mb20[mb20$BirdGroup=="Marshbird",]
+
+sb20 <- list20[["Shorebirds"]]
+sb20 <- sb20[sb20$BirdGroup=="Shorebird",]
+
+wf20 <- list20[["Waterfowl"]]
+wf20 <- wf20[wf20$BirdGroup=="Waterfowl",]
+
+ab20 <- list20[["All-birds"]]
+ab.caz20 <- list20[["All-birds.CAZ"]]
+#reorder all bird table by bird group and species
+ab20$species <- factor(ab20$species, levels = sp)
+ab20 <- ab20[order(ab20$species),]
+ab.caz20$species <- factor(ab.caz20$species, levels = sp)
+ab.caz20 <- ab.caz20[order(ab.caz20$species),]
+
+####Produce efficiency plots####
+library(ggplot2)
+setwd("C:/Users/robinsonba/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/EfficiencyPlots")
+
+#set consistent theme settings for figures
+theme_opts <- list(theme(axis.text.x=element_text(angle=45, hjust=1),
+                         panel.grid.major = element_blank(),
+                         panel.grid.minor = element_blank(),
+                         panel.background = element_blank(),
+                         axis.line = element_line(colour = "black"),
+                         axis.text=element_text(size=16),
+                         axis.title=element_text(size=18),
+                         legend.position = c(0.9, 0.65),
+                         legend.text = element_text(size = 16),
+                         legend.title = element_text(size = 18),
+                         legend.key.size = unit(0.75, "cm"),
+                         legend.key.width = unit(0.75, "cm"),
+                         legend.background = element_rect(colour = "black",size = 1),
+                         legend.box.margin = margin(0.5,0.5,0.5,0.5),
+                         legend.spacing.y = unit(0, "pt")))
+
+#LANDBIRDS
+tiff("LB_EffPlot-20.tiff", width = 11, height = 8.5, units = 'in', res = 600)
+ggplot(data = lb20, aes(x = species, y = PropPop, fill = Priority)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  scale_fill_brewer(type = "seq", palette = "YlGnBu", direction = -1) +
+  geom_hline(yintercept = 0.2, linetype = "dashed") +
+  xlab("Landbird species") + ylab("Proportion of population conserved") +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  theme_opts
+dev.off()
+
+#MARSHBIRDS
+tiff("MB_EffPlot-20.tiff", width = 9.56, height = 8.5, units = 'in', res = 600)
+ggplot(data = mb20, aes(x = species, y = PropPop, fill = Priority)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  scale_fill_brewer(type = "seq", palette = "YlGnBu", direction = -1) +
+  geom_hline(yintercept = 0.2, linetype = "dashed") +
+  xlab("Marshbird species") + ylab("Proportion of population conserved") +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  theme_opts
+dev.off()
+
+#SHOREBIRDS
+tiff("SB_EffPlot-20.tiff", width = 8, height = 8.5, units = 'in', res = 600)
+ggplot(data = sb20, aes(x = species, y = PropPop, fill = Priority)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  scale_fill_manual(values = c("#2c7fb8", "#7fcdbb")) +
+  geom_hline(yintercept = 0.2, linetype = "dashed") +
+  xlab("Shorebird species") + ylab("Proportion of population conserved") +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  theme_opts
+dev.off()
+
+#WATERFOWL
+tiff("WF_EffPlot-20.tiff", width = 8, height = 8.5, units = 'in', res = 600)
+ggplot(data = wf20, aes(x = species, y = PropPop, fill = Priority)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  scale_fill_manual(values = c("#2c7fb8", "#7fcdbb")) +
+  geom_hline(yintercept = 0.2, linetype = "dashed") +
+  xlab("Waterfowl species") + ylab("Proportion of population conserved") +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  theme_opts
+dev.off()
+
+#ALL BIRDS ABF
+ggplot(data = ab20, aes(x = species, y = PropPop, fill = BirdGroup)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  scale_fill_brewer(type = "div", palette = "BrBG", direction = -1) +
+  geom_hline(yintercept = 0.2, linetype = "dashed") +
+  xlab("Species") + ylab("Proportion of population conserved") +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  labs(fill = "Bird group") +
+  theme_opts
+ggsave("AB_EffPlot-20.tiff", device = "tiff", width = 13, height = 8.5, units = 'in', dpi = 600)
+
+#ALL BIRDS CAZ
+ggplot(data = ab.caz20, aes(x = species, y = PropPop, fill = BirdGroup)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  scale_fill_brewer(type = "div", palette = "BrBG", direction = -1) +
+  geom_hline(yintercept = 0.2, linetype = "dashed") +
+  xlab("Species") + ylab("Proportion of population conserved") +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  labs(fill = "Bird group") +
+  theme_opts
+ggsave("AB.caz_EffPlot-20.tiff", device = "tiff", width = 13, height = 8.5, units = 'in', dpi = 600)
+```
+
+Efficiency comparison of ABF and CAZ for marshbirds and all birds
+```{r}
+setwd("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas")
+#import marshbirds output table with ABF
+mbA <- read.table("2_Marshbirds/2_Marshbirds_out/2_Marshbirds.ABF_M.curves.txt")
+#import marshbirds output table with CAZ
+mbC <- read.table("2_Marshbirds_CAZ/2_Marshbirds_CAZ_out/2_Marshbirds_CAZ.CAZ_M.curves.txt")
+
+#The fourth column in each of the above tables represents the average proportion of marshbird species' populations that are conserved. The first column represnts proportion of lastscape lost (not conserved) and should be the same for both tables (standard output from Zonation). Isolate columns neede and combine both
+data <- data.frame("PropCons" = 1-mbA$V1, "MeanPropPop" = mbA$V4)
+#these are data from ABF, so indicate this in a column
+data$algorithm <- "ABF"
+#repeat for CAZ and rbind
+temp <- data.frame("PropCons" = 1-mbC$V1, "MeanPropPop" = mbC$V4)
+temp$algorithm <- "CAZ"
+data <- rbind(data,temp)
+rm(temp)
+
+setwd("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas")
+#import allbirds output table with ABF
+abA <- read.table("5_Allbirds/5_Allbirds_out/5_Allbirds.ABF_M.curves.txt")
+#import allbirds output table with CAZ
+abC <- read.table("5_Allbirds_CAZ/5_Allbirds_CAZ_out/5_Allbirds_CAZ.CAZ_M.curves.txt")
+
+#The fourth column in each of the above tables represents the average proportion of marshbird species' populations that are conserved. The first column represnts proportion of lastscape lost (not conserved) and should be the same for both tables (standard output from Zonation). Isolate columns neede and combine both
+data <- data.frame("PropCons" = 1-abA$V1, "MeanPropPop" = abA$V4)
+#these are data from ABF, so indicate this in a column
+data$algorithm <- "ABF"
+#repeat for CAZ and rbind
+temp <- data.frame("PropCons" = 1-abC$V1, "MeanPropPop" = abC$V4)
+temp$algorithm <- "CAZ"
+data <- rbind(data,temp)
+rm(temp)
+
+#Plot the results
+
+theme_opts <- list(theme(axis.text.x=element_text(angle=45, hjust=1),
+                         panel.grid.major = element_blank(),
+                         panel.grid.minor = element_blank(),
+                         panel.background = element_blank(),
+                         axis.line = element_line(colour = "black"),
+                         axis.text=element_text(size=16),
+                         axis.title=element_text(size=18),
+                         legend.position = c(0.9, 0.65),
+                         legend.text = element_text(size = 16),
+                         legend.title = element_text(size = 18),
+                         legend.key.size = unit(0.75, "cm"),
+                         legend.key.width = unit(0.75, "cm"),
+                         legend.background = element_rect(colour = "black",size = 1),
+                         legend.box.margin = margin(0.5,0.5,0.5,0.5),
+                         legend.spacing.y = unit(0, "pt")))
+library(ggplot2)
+setwd("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/EfficiencyPlots")
+tiff("MB_ABF-CAZ.tiff", width = 8, height = 8, units = 'in', res = 600)
+ggplot(data = data, aes(x = PropCons, y = MeanPropPop, colour = algorithm)) +
+  geom_line() +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  scale_color_discrete(labels = c("Diversity", "Core Area")) +
+  labs(x = "Proportion of landscape conserved", y = "Proportion of population conserved (mean)") +
+  geom_vline(xintercept = 0.2, linetype = "dashed") +
+  theme_opts
+dev.off()
+
+#repeat for all birds
+setwd("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Zonation/Scenarios2.0/PHJV_PriorAreas")
+#import allbirds output table with ABF
+abA <- read.table("5_Allbirds/5_Allbirds_out/5_Allbirds.ABF_M.curves.txt")
+#import allbirds output table with CAZ
+abC <- read.table("5_Allbirds_CAZ/5_Allbirds_CAZ_out/5_Allbirds_CAZ.CAZ_M.curves.txt")
+
+#The fourth column in each of the above tables represents the average proportion of marshbird species' populations that are conserved. The first column represnts proportion of lastscape lost (not conserved) and should be the same for both tables (standard output from Zonation). Isolate columns neede and combine both
+data <- data.frame("PropCons" = 1-abA$V1, "MeanPropPop" = abA$V4)
+#these are data from ABF, so indicate this in a column
+data$algorithm <- "ABF"
+#repeat for CAZ and rbind
+temp <- data.frame("PropCons" = 1-abC$V1, "MeanPropPop" = abC$V4)
+temp$algorithm <- "CAZ"
+data <- rbind(data,temp)
+rm(temp)
+
+#Plot the results
+
+theme_opts <- list(theme(axis.text.x=element_text(angle=45, hjust=1),
+                         panel.grid.major = element_blank(),
+                         panel.grid.minor = element_blank(),
+                         panel.background = element_blank(),
+                         axis.line = element_line(colour = "black"),
+                         axis.text=element_text(size=16),
+                         axis.title=element_text(size=18),
+                         legend.position = c(0.9, 0.65),
+                         legend.text = element_text(size = 16),
+                         legend.title = element_text(size = 18),
+                         legend.key.size = unit(0.75, "cm"),
+                         legend.key.width = unit(0.75, "cm"),
+                         legend.background = element_rect(colour = "black",size = 1),
+                         legend.box.margin = margin(0.5,0.5,0.5,0.5),
+                         legend.spacing.y = unit(0, "pt")))
+library(ggplot2)
+setwd("C:/Users/robinsonba/OneDrive - EC-EC/Documents/Projects/Priority Areas Analysis/Data/Results/Zonation/EfficiencyPlots")
+tiff("AB_ABF-CAZ.tiff", width = 8, height = 8, units = 'in', res = 600)
+ggplot(data = data, aes(x = PropCons, y = MeanPropPop, colour = algorithm)) +
+  geom_line() +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0),
+                     breaks = seq(0,1,0.2)) +
+  scale_color_discrete(labels = c("Diversity", "Core Area")) +
+  labs(x = "Proportion of landscape conserved", y = "Proportion of population conserved (mean)") +
+  geom_vline(xintercept = 0.2, linetype = "dashed") +
+  theme_opts
+dev.off()
+```
+

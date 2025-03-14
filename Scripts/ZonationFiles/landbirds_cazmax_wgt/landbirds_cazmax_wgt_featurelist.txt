@@ -1,0 +1,16 @@
+"weight" "filename"
+30 ../../../Data/SnappedDensityRasters/Landbirds/BAIS_2018_50.tif
+40 ../../../Data/SnappedDensityRasters/Landbirds/BOBO_2018_50.tif
+12 ../../../Data/SnappedDensityRasters/Landbirds/BRSP_2018_50.tif
+40 ../../../Data/SnappedDensityRasters/Landbirds/CCLO_2018_50.tif
+15 ../../../Data/SnappedDensityRasters/Landbirds/CCSP_2018_50.tif
+16 ../../../Data/SnappedDensityRasters/Landbirds/GRSP_2018_50.tif
+12 ../../../Data/SnappedDensityRasters/Landbirds/HOLA_2018_50.tif
+40 ../../../Data/SnappedDensityRasters/Landbirds/LARB_2018_50.tif
+16 ../../../Data/SnappedDensityRasters/Landbirds/LCSP_2018_50.tif
+40 ../../../Data/SnappedDensityRasters/Landbirds/TBLO_2018_50.tif
+13 ../../../Data/SnappedDensityRasters/Landbirds/SAVS_2018_50.tif
+40 ../../../Data/SnappedDensityRasters/Landbirds/SPPI_2018_50.tif
+14 ../../../Data/SnappedDensityRasters/Landbirds/VESP_2018_50.tif
+13 ../../../Data/SnappedDensityRasters/Landbirds/WEME_2018_50.tif
+16 ../../../Data/SnappedDensityRasters/Landbirds/UPSA_2018_50.tif

@@ -1,0 +1,8 @@
+"weight" "filename"
+1.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/BWTE.tif
+1.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/CANV.tif
+1.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/GADW.tif
+1.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/MALL.tif
+2.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/NOPI.tif
+1.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/NSHO.tif
+1.0       ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/REDH.tif

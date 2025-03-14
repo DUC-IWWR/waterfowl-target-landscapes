@@ -1,0 +1,2 @@
+feature list file = waterfowl_cazmax_wgt_featurelist.txt
+analysis area mask layer = ../../../Data/SnappedDensityRasters/a_mask.tif

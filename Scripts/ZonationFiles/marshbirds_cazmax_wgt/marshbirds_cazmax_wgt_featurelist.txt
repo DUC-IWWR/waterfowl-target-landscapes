@@ -1,0 +1,14 @@
+"weight" "filename"
+15 ../../../Data/SnappedDensityRasters/Marshbirds/AMBI_occu.tif
+14 ../../../Data/SnappedDensityRasters/Marshbirds/AMCO_occu.tif
+10 ../../../Data/SnappedDensityRasters/Marshbirds/COYE_2018_50.tif
+15 ../../../Data/SnappedDensityRasters/Marshbirds/HOGR_occu.tif
+12 ../../../Data/SnappedDensityRasters/Marshbirds/MAWR_occu.tif
+15 ../../../Data/SnappedDensityRasters/Marshbirds/NESP_occu.tif
+13 ../../../Data/SnappedDensityRasters/Marshbirds/PBGR_occu.tif
+12 ../../../Data/SnappedDensityRasters/Marshbirds/RNGR_occu.tif
+10 ../../../Data/SnappedDensityRasters/Marshbirds/RWBL_2018_50.tif
+13 ../../../Data/SnappedDensityRasters/Marshbirds/SEWR_2018_50.tif
+15 ../../../Data/SnappedDensityRasters/Marshbirds/SORA_occu.tif
+11 ../../../Data/SnappedDensityRasters/Marshbirds/WISN_2018_50.tif
+13 ../../../Data/SnappedDensityRasters/Marshbirds/YHBL_2018_50.tif

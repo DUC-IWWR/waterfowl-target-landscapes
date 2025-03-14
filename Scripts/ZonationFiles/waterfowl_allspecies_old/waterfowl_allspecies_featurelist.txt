@@ -1,0 +1,2 @@
+"filename"
+../../../Data/SnappedDensityRasters/AllDucksDSSV2
