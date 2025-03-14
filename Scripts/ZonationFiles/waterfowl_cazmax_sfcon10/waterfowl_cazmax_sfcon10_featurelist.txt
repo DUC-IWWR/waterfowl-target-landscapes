@@ -1,8 +1,0 @@
-"sf_conn" "filename"
-1         ../../../Data/SnappedDensityRasters/BWTE_snapped.tif
-1         ../../../Data/SnappedDensityRasters/CANV_snapped.tif
-1         ../../../Data/SnappedDensityRasters/GADW_snapped.tif
-1         ../../../Data/SnappedDensityRasters/MALL_snapped.tif
-1         ../../../Data/SnappedDensityRasters/NOPI_snapped.tif
-1         ../../../Data/SnappedDensityRasters/NSHO_snapped.tif
-1         ../../../Data/SnappedDensityRasters/REDH_snapped.tif

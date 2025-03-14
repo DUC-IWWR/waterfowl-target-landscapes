@@ -1,3 +1,0 @@
-feature list file = waterfowl_cazmax_sfcon10_featurelist.txt
-analysis area mask layer = ../../../Data/SnappedDensityRasters/a_mask.tif
-single-feature connectivity link file = waterfowl_cazmax_sfcon10_linkfile.txt
