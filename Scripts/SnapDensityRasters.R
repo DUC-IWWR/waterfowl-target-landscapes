@@ -7,7 +7,7 @@ library(sf)
 #use this line for all 10 species
 #ducklist <- grep(list.files("Data/DensityRasters", full.names = T), pattern = "DuckDensity", invert = T, value = T)
 #use this line for a selection of species
-ducklist <- grep(list.files("Data/DensityRasters", full.names = T), pattern = "MALL|GADW|NOPI|BWTE|NSHO|CANV|REDH", value = T)
+ducklist <- grep(list.files("data/raw/density-rasters", full.names = T), pattern = "MALL|GADW|NOPI|BWTE|NSHO|CANV|REDH", value = T)
 
 
 #the extents and origins are different, so need to initially load them as a list
@@ -19,4 +19,4 @@ lapply(ducks, terra::ext)
 ducks <- lapply(ducks, terra::project, y = ducks[[3]]) #see below why I chose to use the 3rd raster as the template for reprojection
 
 #export snapped rasters
-lapply(ducks, function(x) {writeRaster(x, filename = paste0("Data/SnappedDensityRasters/", names(x), "_snapped.tif"))})
+lapply(ducks, function(x) {writeRaster(x, filename = paste0("data/generated/snapped-rasters/", names(x), "_snapped.tif"))})
