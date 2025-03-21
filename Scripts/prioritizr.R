@@ -13,7 +13,7 @@ library(tidyverse)
 ###
 
 #use this line for a selection of species
-ducklist <- grep(list.files("Data/DensityRasters", full.names = T), pattern = "MALL|GADW|NOPI|BWTE|NSHO|CANV|REDH", value = T)
+ducklist <- grep(list.files("data/raw/density-rasters", full.names = T), pattern = "MALL|GADW|NOPI|BWTE|NSHO|CANV|REDH", value = T)
 
 
 #the extents and origins are different, so need to initially load them as a list
@@ -36,6 +36,6 @@ p1 <- problem(pu, ducks) %>%
       add_min_set_objective() %>%
       add_relative_targets(0.2) %>%
       add_boundary_penalties(penalty = 200) %>%
-      add_highs_solver()
+      add_gurobi_solver()
 s1 <- solve(p1)
 

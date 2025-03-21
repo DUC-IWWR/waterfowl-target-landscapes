@@ -1,8 +1,8 @@
 "filename"
-../../../Data/SnappedDensityRasters/BWTE_snapped.tif
-../../../Data/SnappedDensityRasters/CANV_snapped.tif
-../../../Data/SnappedDensityRasters/GADW_snapped.tif
-../../../Data/SnappedDensityRasters/MALL_snapped.tif
-../../../Data/SnappedDensityRasters/NOPI_snapped.tif
-../../../Data/SnappedDensityRasters/NSHO_snapped.tif
-../../../Data/SnappedDensityRasters/REDH_snapped.tif
+../../../data/generated/snapped-rasters/BWTE_perSQK_CopyRaster_snapped.tif
+../../../data/generated/snapped-rasters/CANV_perSQK_CopyRaster_snapped.tif
+../../../data/generated/snapped-rasters/GADW_perSQK_CopyRaster_snapped.tif
+../../../data/generated/snapped-rasters/MALL_perSQK_CopyRaster_snapped.tif
+../../../data/generated/snapped-rasters/NOPI_perSQK_CopyRaster_snapped.tif
+../../../data/generated/snapped-rasters/NSHO_perSQK_CopyRaster_snapped.tif
+../../../data/generated/snapped-rasters/REDH_perSQK_CopyRaster_snapped.tif
