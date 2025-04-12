@@ -19,7 +19,7 @@ snap_density_rasters <- function(files = NULL)
   #' see below why I chose to use the 3rd raster as the template for reprojection
   lapply(ducks, terra::project, y = ducks[[4]]) 
   
-  ducks
+  lapply(ducks, function(x) {writeRaster(x, filename = paste0("data/generated/snapped-rasters/", names(x), "_snapped.tif"), overwrite = TRUE)})
 }
 
 ####### Read Data #################################

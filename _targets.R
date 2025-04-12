@@ -45,27 +45,27 @@ list(
     format = "file"
   ),
   tar_target(
-    name = nopi_raw_stacked,
+    name = nopi_raw_raster,
     "data/raw/rasters/NOPI_perSQK_CopyRaster.tif",
     format = "file"
   ),
   tar_target(
-    name = bwte_raw_stacked,
+    name = bwte_raw_raster,
     "data/raw/rasters/BWTE_Pairs_perSQK_CopyRaster.tif",
     format = "file"
   ),
   tar_target(
-    name = nsho_raw_stacked,
+    name = nsho_raw_raster,
     "data/raw/rasters/NSHO_perSQK_CopyRaster.tif",
     format = "file"
   ),
   tar_target(
-    name =canv_raw_stacked,
+    name =canv_raw_raster,
     "data/raw/rasters/CANV_Pairs_perSQK_CopyRaster.tif",
     format = "file"
   ),
   tar_target(
-    name = redh_raw_stacked,
+    name = redh_raw_raster,
     "data/raw/rasters/REDH_perSQK_CopyRaster.tif",
     format = "file"
   ),
@@ -80,13 +80,20 @@ list(
   
   tar_terra_rast(
     name = snapped_rasters,
-    command = snap_density_rasters(ducklist)
-  ),
-  
-  tar_terra_rast(
-    name = save_snapped_rasters_target,
-    command = save_snapped_rasters(rasters = snapped_rasters)
+    command = snap_density_rasters(files = list(all_species = species_7_stacked,
+                                                   MALL = mall_raw_raster,
+                                                   GADW = gadw_raw_raster,
+                                                   NOPI = nopi_raw_raster,
+                                                   BWTE = bwte_raw_raster,
+                                                   NSHO = nsho_raw_raster,
+                                                   CANV = canv_raw_raster,
+                                                   REDH = redh_raw_raster))
   )
+  
+  # tar_terra_rast(
+  #   name = save_snapped_rasters_target,
+  #   command = save_snapped_rasters(rasters = snapped_rasters)
+  # )
 )
 
 
