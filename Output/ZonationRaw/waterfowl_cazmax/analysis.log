@@ -1,7 +1,0 @@
-[2025-01-10 13:49:56.211] [info] Zonation 5 v2.1
-[2025-01-10 13:49:56.502] [info] Arguments given: -a --mode=CAZMAX --gui waterfowl_cazmax.z5 ../../../Output/ZonationRaw/waterfowl_cazmax
-[2025-01-10 13:49:56.513] [info] Using 16-bit quantization
-[2025-01-10 13:49:56.522] [info] Using 16 threads for computation
-[2025-01-10 13:49:56.525] [info] Loading project "waterfowl_cazmax.z5"
-[2025-01-10 13:49:56.534] [error] No such file: "waterfowl_cazmax.z5"
-[2025-01-10 13:49:56.551] [error] Errors while loading project

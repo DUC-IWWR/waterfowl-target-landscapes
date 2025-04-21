@@ -1,3 +1,0 @@
-[2024-11-20 13:27:29.280] [info] This file will contain all warnings and errors of the analysis
-[2024-11-20 13:27:35.340] [warning] Hierarchic mask "C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Data\masks\PA_All_int.tif" contains 24 values in cells with no data in feature layers
-[2024-11-20 13:27:35.342] [warning] Hierarchic mask "C:\Users\robinsonba\OneDrive - EC-EC\Documents\Projects\Avian Trend Monitoring\Grassland Bird Monitoring\R Projects\Zonation Manuscript\Data\masks\PA_All_int.tif" misses values for 300876 cells with some data in feature layers, replacing missing values with zero

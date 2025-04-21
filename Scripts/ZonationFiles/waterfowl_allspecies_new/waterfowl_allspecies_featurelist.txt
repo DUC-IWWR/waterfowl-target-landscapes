@@ -1,2 +1,0 @@
-"filename"
-../../../data/raw/density-rasters/7species_perSQK_CopyRaster.tif
