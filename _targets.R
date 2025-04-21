@@ -12,6 +12,7 @@ library(geotargets)
 
 tar_source("src/reproject-raster.R")
 tar_source("src/run-zonation.R")
+tar_source("src/stack-rasters.R")
 
 ####### Targets ###################################
 
@@ -114,10 +115,31 @@ list(
                                ref = gadw_raw_raster),
     format = "file"
   ),
-
+  
+  ####### Layer Stacking Targets ###################################
+  
+  # note that "dabblers_stacked" does NOT include pintail
+  tar_target(
+    name = dabblers_stacked,
+    command = stack_rasters(raster_list = c(mall_reprojected,
+                                            gadw_reprojected,
+                                            bwte_reprojected,
+                                            nsho_reprojected),
+                            new_raster_name = "dabblers"),
+    format = "file"
+  ),
+  
+  tar_target(
+    name = divers_stacked,
+    command = stack_rasters(raster_list = c(canv_reprojected,
+                                            redh_reprojected),
+                            new_raster_name = "divers"),
+    format = "file"
+  ),
   
   ####### Zonation Scenarios ###################################
   
+  # represent species as a single layer
   tar_target(
     name = single_layer_waterfowl,
     command = run_zonation(feature_list = c(species_7_reprojected),
@@ -125,6 +147,7 @@ list(
                            zonation_mode = "CAZMAX")
   ),
   
+  # keep all layers separate from each other
   tar_target(
     name = all_waterfowl_separate,
     command = run_zonation(feature_list = c(mall_reprojected,
@@ -135,6 +158,15 @@ list(
                                             canv_reprojected,
                                             redh_reprojected),
                            scenario_name = "separate_layer_all",
+                           zonation_mode = "CAZMAX")
+  ),
+  
+  tar_target(
+    name = guild_level,
+    command = run_zonation(feature_list = c(dabblers_stacked,
+                                            divers_stacked,
+                                            nopi_reprojected),
+                           scenario_name = "guild_level",
                            zonation_mode = "CAZMAX")
   )
   
