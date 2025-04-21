@@ -20,6 +20,8 @@ reproject_raster <- function(raster_file = NULL,
   writeRaster(new_raster, 
               filename = filename, 
               overwrite = TRUE)
+  
+  return(filename)
 }
 
 
