@@ -7,9 +7,9 @@
 
 snap_density_rasters <- function(files = NULL)
 {
-  print(files)
   # the extents and origins are different, so need to initially load them as a list
   ducks <- lapply(files, rast)
+  print(ducks)
   
   #' 4 of 10 rasters have the same origin (3, 5, 9, 10 in list), so resample to 
   #' that origin (i.e use 3rd raster as a template)

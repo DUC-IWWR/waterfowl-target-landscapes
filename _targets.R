@@ -20,6 +20,7 @@ tar_option_set(
 )
 
 # Run the R scripts in the R/ folder with your custom functions:
+tar_source("src/reproject-raster.R")
 tar_source("src/snap-density-rasters.R")
 tar_source("src/get-ducklist.R")
 tar_source("src/save-snapped-rasters.R")
@@ -60,7 +61,7 @@ list(
     format = "file"
   ),
   tar_target(
-    name =canv_raw_raster,
+    name = canv_raw_raster,
     "data/raw/rasters/CANV_Pairs_perSQK_CopyRaster.tif",
     format = "file"
   ),
@@ -71,24 +72,64 @@ list(
   ),
   
   
-  
+  # We then need to reproject all rasters to match the extent of the GADW raster
+  tar_terra_rast(
+    name = species_7_reprojected,
+    command = reproject_raster(raster_file = species_7_stacked,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = mall_reprojected,
+    command = reproject_raster(raster_file = mall_raw_raster,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = gadw_reprojected,
+    command = reproject_raster(raster_file = gadw_raw_raster,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = nopi_reprojected,
+    command = reproject_raster(raster_file = nopi_raw_raster,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = bwte_reprojected,
+    command = reproject_raster(raster_file = bwte_raw_raster,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = nsho_reprojected,
+    command = reproject_raster(raster_file = nsho_raw_raster,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = canv_reprojected,
+    command = reproject_raster(raster_file = canv_raw_raster,
+                               ref = gadw_raw_raster)
+  ),
+  tar_terra_rast(
+    name = redh_reprojected,
+    command = reproject_raster(raster_file = redh_raw_raster,
+                               ref = gadw_raw_raster)
+  )
   
   # tar_target(
   #   name = ducklist,
   #   command = get_ducklist(path = "data/raw/density-rasters")
   # ),
   
-  tar_terra_rast(
-    name = snapped_rasters,
-    command = snap_density_rasters(files = list(all_species = species_7_stacked,
-                                                   MALL = mall_raw_raster,
-                                                   GADW = gadw_raw_raster,
-                                                   NOPI = nopi_raw_raster,
-                                                   BWTE = bwte_raw_raster,
-                                                   NSHO = nsho_raw_raster,
-                                                   CANV = canv_raw_raster,
-                                                   REDH = redh_raw_raster))
-  )
+  # tar_terra_rast(
+  #   name = snapped_rasters,
+  #   command = snap_density_rasters(files = list(all_species = species_7_stacked,
+  #                                                  MALL = mall_raw_raster,
+  #                                                  GADW = gadw_raw_raster,
+  #                                                  NOPI = nopi_raw_raster,
+  #                                                  BWTE = bwte_raw_raster,
+  #                                                  NSHO = nsho_raw_raster,
+  #                                                  CANV = canv_raw_raster,
+  #                                                  REDH = redh_raw_raster))
+  # )
   
   # tar_terra_rast(
   #   name = save_snapped_rasters_target,
