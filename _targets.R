@@ -7,27 +7,22 @@
 
 ####### Import Libraries and External Files #######
 
-# Load packages required to define the pipeline:
 library(targets)
 library(geotargets)
-# library(tarchetypes) # Load other packages as needed.
 
-####### Targets #################################$$
+tar_source("src/reproject-raster.R")
+tar_source("src/run-zonation.R")
+
+####### Targets ###################################
 
 # Set target options:
 tar_option_set(
-  packages = c("terra", "sf") # Packages that your targets need for their tasks.
+  packages = c("terra", "sf")
 )
 
-# Run the R scripts in the R/ folder with your custom functions:
-tar_source("src/reproject-raster.R")
-
-# tar_source("other_functions.R") # Source other scripts as needed.
-
-# Replace the target list below with your own:
 list(
   
-  #First 8 are all raw rasters that have NOT been snapped
+  ####### Raw Rasters ###################################
   tar_target(
     name = species_7_stacked,
     "data/raw/rasters/7species_perSQK_CopyRaster.tif",
@@ -70,7 +65,7 @@ list(
   ),
   
   
-  # We then need to reproject all rasters to match the extent of the GADW raster
+  ####### Reprojected Rasters ###################################
   tar_target(
     name = species_7_reprojected,
     command = reproject_raster(raster_file = species_7_stacked,
@@ -118,7 +113,31 @@ list(
     command = reproject_raster(raster_file = redh_raw_raster,
                                ref = gadw_raw_raster),
     format = "file"
+  ),
+
+  
+  ####### Zonation Scenarios ###################################
+  
+  tar_target(
+    name = single_layer_waterfowl,
+    command = run_zonation(feature_list = c(species_7_reprojected),
+                           scenario_name = "single_layer_all",
+                           zonation_mode = "CAZMAX")
+  ),
+  
+  tar_target(
+    name = all_waterfowl_separate,
+    command = run_zonation(feature_list = c(mall_reprojected,
+                                            gadw_reprojected,
+                                            nopi_reprojected,
+                                            bwte_reprojected,
+                                            nsho_reprojected,
+                                            canv_reprojected,
+                                            redh_reprojected),
+                           scenario_name = "separate_layer_all",
+                           zonation_mode = "CAZMAX")
   )
+  
 )
 
 
