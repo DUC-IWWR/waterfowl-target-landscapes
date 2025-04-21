@@ -12,7 +12,7 @@ library(sf)
 
 ####### Read Data #################################
 
-ducklist <- list.files("data/raw/density-rasters", full.names = T)
+ducklist <- list.files("data/raw/rasters", full.names = T)
 
 ####### Main Script  ##############################
 
