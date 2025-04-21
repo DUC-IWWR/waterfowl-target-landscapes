@@ -7,6 +7,7 @@
 
 snap_density_rasters <- function(files = NULL)
 {
+  print(files)
   # the extents and origins are different, so need to initially load them as a list
   ducks <- lapply(files, rast)
   
@@ -17,7 +18,7 @@ snap_density_rasters <- function(files = NULL)
   
   #' use project to match projection, resolution, origin, and extent, then stack
   #' see below why I chose to use the 3rd raster as the template for reprojection
-  lapply(ducks, terra::project, y = ducks[[4]]) 
+  lapply(ducks, terra::project, y = ducks[[3]]) 
   
   lapply(ducks, function(x) {writeRaster(x, filename = paste0("data/generated/snapped-rasters/", names(x), "_snapped.tif"), overwrite = TRUE)})
 }
