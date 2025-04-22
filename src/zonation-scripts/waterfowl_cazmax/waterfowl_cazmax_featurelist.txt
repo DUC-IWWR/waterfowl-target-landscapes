@@ -1,8 +1,0 @@
-"filename"
-../../../data/generated/snapped-rasters/BWTE_Pairs_perSQK_CopyRaster_snapped.tif
-../../../data/generated/snapped-rasters/CANV_Pairs_perSQK_CopyRaster_snapped.tif
-../../../data/generated/snapped-rasters/GADW_perSQK_CopyRaster_snapped.tif
-../../../data/generated/snapped-rasters/MALL_perSQK_CopyRaster_snapped.tif
-../../../data/generated/snapped-rasters/NOPI_perSQK_CopyRaster_snapped.tif
-../../../data/generated/snapped-rasters/NSHO_perSQK_CopyRaster_snapped.tif
-../../../data/generated/snapped-rasters/REDH_perSQK_CopyRaster_snapped.tif

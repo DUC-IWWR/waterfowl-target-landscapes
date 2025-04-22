@@ -1,8 +1,0 @@
-"weight" "filename"
-14 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/BWTE.tif
-15 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/CANV.tif
-12 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/GADW.tif
-10 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/MALL.tif
-15 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/NOPI.tif
-11 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/NSHO.tif
-14 ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/REDH.tif

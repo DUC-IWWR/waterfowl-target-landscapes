@@ -1,3 +1,0 @@
-feature list file = waterfowl_cazmax_wgt_PA_featurelist.txt
-analysis area mask layer = ../../../Data/SnappedDensityRasters/Waterfowl_ZonationMSonly/a_mask.tif
-hierarchic mask layer = ../../../Data/masks/PA_All_int.tif

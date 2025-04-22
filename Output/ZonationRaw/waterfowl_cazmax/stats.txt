@@ -1,2 +1,0 @@
-Arguments given: -a --mode=CAZMAX --gui waterfowl_cazmax.z5 ../../../Output/ZonationRaw/waterfowl_cazmax
-Settings filename: waterfowl_cazmax.z5
