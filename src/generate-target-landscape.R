@@ -32,7 +32,7 @@ generate_target_landscape <- function(rankmap_path = NULL,
   }
   
   file = paste0(output_dir, "/TL_", threshold, ".shp")
-  st_write(tl_smooth, dsn = file, filetype = "ESRI Shapefile")
+  st_write(tl_smooth, dsn = file, filetype = "ESRI Shapefile", append = FALSE)
 
   return(file)
 }
