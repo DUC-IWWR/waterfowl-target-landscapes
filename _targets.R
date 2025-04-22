@@ -14,6 +14,7 @@ tar_source("src/reproject-raster.R")
 tar_source("src/run-zonation.R")
 tar_source("src/stack-rasters.R")
 tar_source("src/generate-target-landscape.R")
+tar_source("src/plot-target-landscape.R")
 
 ####### Targets ###################################
 
@@ -63,6 +64,11 @@ list(
   tar_target(
     name = redh_raw_raster,
     "data/raw/rasters/REDH_perSQK_CopyRaster.tif",
+    format = "file"
+  ),
+  tar_target(
+    name = tl_old,
+    "data/raw/target-landscapes-previous/PHJV_WaterfowlTargetLandscapes.shp",
     format = "file"
   ),
   
@@ -148,7 +154,7 @@ list(
                            zonation_mode = "CAZMAX"),
     format = "file"
   ),
- 
+  
    tar_target(
     name = single_layer_tl,
     command = generate_target_landscape(rankmap_path = single_layer_waterfowl,
@@ -160,6 +166,16 @@ list(
     format = "file"
   ),
   
+  tar_target(
+    name = single_layer_tl_plot,
+    command = plot_target_landscape(tl_path = single_layer_tl,
+                                    old_tl_path = tl_old,
+                                    width = 6,
+                                    height = 6,
+                                    res = 300,
+                                    units = "in",
+                                    scenario_name = "single_layer_all")
+  ),
   
   ##### Separate Layers ######
   tar_target(
@@ -187,6 +203,17 @@ list(
     format = "file"
   ),
   
+  tar_target(
+    name = separate_layer_tl_plot,
+    command = plot_target_landscape(tl_path = separate_layer_tl,
+                                    old_tl_path = tl_old,
+                                    width = 6,
+                                    height = 6,
+                                    res = 300,
+                                    units = "in",
+                                    scenario_name = "separate_layer_all")
+  ),
+  
   ###### Guild Level Scenario #####
   # i.e., a layer for dabblers, a layer for divers, and a layer for NOPI
   tar_target(
@@ -208,6 +235,17 @@ list(
                                         max_hole = 70000000,
                                         smooth = 8),
     format = "file"
+  ),
+  
+  tar_target(
+    name = guild_level_tl_plot,
+    command = plot_target_landscape(tl_path = guild_level_tl,
+                                    old_tl_path = tl_old,
+                                    width = 6,
+                                    height = 6,
+                                    res = 300,
+                                    units = "in",
+                                    scenario_name = "guild_level")
   )
   
 )
