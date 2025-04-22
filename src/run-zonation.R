@@ -35,7 +35,9 @@ run_zonation <- function(feature_list = NULL,
   # Run the resulting zonation file
   system(command = cmd_filename)
   
-  return("hi")
+  rankmap_path <- paste0("output/zonation/", scenario_name, "_", zonation_mode, "/rankmap.tif")
+  
+  return(rankmap_path)
 }
 
 

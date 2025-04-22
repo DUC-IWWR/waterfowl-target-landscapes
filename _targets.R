@@ -13,12 +13,13 @@ library(geotargets)
 tar_source("src/reproject-raster.R")
 tar_source("src/run-zonation.R")
 tar_source("src/stack-rasters.R")
+tar_source("src/generate-target-landscape.R")
 
 ####### Targets ###################################
 
 # Set target options:
 tar_option_set(
-  packages = c("terra", "sf")
+  packages = c("terra", "sf", "smoothr")
 )
 
 list(
@@ -139,15 +140,28 @@ list(
   
   ####### Zonation Scenarios ###################################
   
-  # represent species as a single layer
+  ######### Single Layer #################
   tar_target(
     name = single_layer_waterfowl,
     command = run_zonation(feature_list = c(species_7_reprojected),
                            scenario_name = "single_layer_all",
-                           zonation_mode = "CAZMAX")
+                           zonation_mode = "CAZMAX"),
+    format = "file"
+  ),
+ 
+   tar_target(
+    name = single_layer_tl,
+    command = generate_target_landscape(rankmap_path = single_layer_waterfowl,
+                                        scenario_name = "single_layer_all",
+                                        threshold = 0.78,
+                                        min_poly = 156000000,
+                                        max_hole = 70000000,
+                                        smooth = 8),
+    format = "file"
   ),
   
-  # keep all layers separate from each other
+  
+  ##### Separate Layers ######
   tar_target(
     name = all_waterfowl_separate,
     command = run_zonation(feature_list = c(mall_reprojected,
@@ -158,24 +172,42 @@ list(
                                             canv_reprojected,
                                             redh_reprojected),
                            scenario_name = "separate_layer_all",
-                           zonation_mode = "CAZMAX")
+                           zonation_mode = "CAZMAX"),
+    format = "file"
   ),
   
+  tar_target(
+    name = separate_layer_tl,
+    command = generate_target_landscape(rankmap_path = all_waterfowl_separate,
+                                        scenario_name = "separate_layer_all",
+                                        threshold = 0.78,
+                                        min_poly = 156000000,
+                                        max_hole = 70000000,
+                                        smooth = 8),
+    format = "file"
+  ),
+  
+  ###### Guild Level Scenario #####
+  # i.e., a layer for dabblers, a layer for divers, and a layer for NOPI
   tar_target(
     name = guild_level,
     command = run_zonation(feature_list = c(dabblers_stacked,
                                             divers_stacked,
                                             nopi_reprojected),
                            scenario_name = "guild_level",
-                           zonation_mode = "CAZMAX")
+                           zonation_mode = "CAZMAX"),
+    format = "file"
+  ),
+  
+  tar_target(
+    name = guild_level_tl,
+    command = generate_target_landscape(rankmap_path = guild_level,
+                                        scenario_name = "guild_level",
+                                        threshold = 0.78,
+                                        min_poly = 156000000,
+                                        max_hole = 70000000,
+                                        smooth = 8),
+    format = "file"
   )
   
 )
-
-
-
-
-
-
-
-
