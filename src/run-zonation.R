@@ -1,15 +1,39 @@
 run_zonation <- function(feature_list = NULL,
+                         feature_weights = NULL,
                          scenario_name = NULL,
                          zonation_mode = NULL)
 {
+  if (length(feature_list) != length(feature_weights))
+  {
+    stop("Length of feature weights do not match lenght of feature list.")
+  }
+  
   # First create featurelist
   featurelist_filename <- paste0("data/generated/", scenario_name, "_featurelist.txt")
   
   featurelist_file <- file(featurelist_filename)
-  featurelist_string <- "\"filename\"\n"
-  for (f in feature_list)
+  
+  if (!is.null(feature_weights))
   {
-    featurelist_string <- paste0(featurelist_string, "../../", f, "\n")
+    featurelist_string <- "\"weight\" \"filename\"\n"
+  }else
+  {
+    featurelist_string <- "\"filename\"\n"
+  }
+
+  for (i in 1:length(feature_list))
+  {
+    if (!is.null(feature_weights))
+    {
+      featurelist_string <- paste0(featurelist_string,
+                                   feature_weights[i], 
+                                   "     ../../", 
+                                   feature_list[i], "\n")
+    }else
+    {
+      featurelist_string <- paste0(featurelist_string, "../../", 
+                                   feature_list[i], "\n")
+    }
   }
   writeLines(featurelist_string, con = featurelist_file)
   
