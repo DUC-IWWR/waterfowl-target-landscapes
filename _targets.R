@@ -151,6 +151,8 @@ list(
   
   ####### Zonation Scenarios ###################################
   
+  
+  
   ####### 1. Separate species, no NOPI weighting ###############
   tar_target(
     name = sep_layer_zonation_directory,
@@ -209,51 +211,5 @@ list(
                                         smooth = 8),
     format = "file"
   )
-  
-  
-  
-  
-  
-  
-  
-  
-
-  ##### Separate Layers ######
-  # tar_target(
-  #   name = separate_layer_rankmap,
-  #   command = run_zonation(feature_list = c(mall_reprojected,
-  #                                           gadw_reprojected,
-  #                                           nopi_reprojected,
-  #                                           bwte_reprojected,
-  #                                           nsho_reprojected,
-  #                                           canv_reprojected,
-  #                                           redh_reprojected),
-  #                          scenario_name = "separate_layer_all",
-  #                          zonation_mode = "CAZMAX"),
-  #   format = "file"
-  # ),
-  # 
-  # tar_target(
-  #   name = separate_layer_tl,
-  #   command = generate_target_landscape(rankmap_path = separate_layer_rankmap,
-  #                                       scenario_name = "separate_layer_all",
-  #                                       threshold = 0.74,
-  #                                       min_poly = 156000000,
-  #                                       max_hole = 70000000,
-  #                                       smooth = 8),
-  #   format = "file"
-  # ),
-  
-  # tar_target(
-  #   name = separate_layer_tl_plot,
-  #   command = plot_target_landscape(tl_path = separate_layer_tl,
-  #                                   old_tl_path = tl_old,
-  #                                   width = 6,
-  #                                   height = 6,
-  #                                   res = 300,
-  #                                   units = "in",
-  #                                   scenario_name = "separate_layer_all")
-  # ),
-
   
 )
