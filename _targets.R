@@ -8,7 +8,9 @@
 ####### Import Libraries and External Files #######
 
 library(targets)
+library(tarchetypes)
 library(geotargets)
+library(tibble)
 
 tar_source("src/reproject-raster.R")
 tar_source("src/create-zonation-scenario-dir.R")
@@ -26,6 +28,22 @@ tar_source("src/plot-target-landscape.R")
 # Set target options:
 tar_option_set(
   packages = c("terra", "sf", "smoothr")
+)
+
+scenarios <- tibble::tribble(
+  ~scenario_name, ~threshold,
+  "0", 0.70,
+  "1", 0.71,
+  "2", 0.72,
+  "3", 0.73,
+  "4", 0.74,
+  "5", 0.75,
+  "6", 0.76,
+  "7", 0.77,
+  "8", 0.78,
+  "9", 0.79,
+  "10", 0.80
+  
 )
 
 list(
@@ -151,58 +169,59 @@ list(
   
   ####### Zonation Scenarios ###################################
   
-  
-  
-  ####### 1. Separate species, no NOPI weighting ###############
-  tar_target(
-    name = sep_layer_zonation_directory,
-    command = create_zonation_scenario_dir(scenario_name = "sep_layer")
-  ),
-  
-  tar_target(
-    name = sep_layer_output_directory,
-    command = create_scenario_output_dir(scenario_name = "sep_layer")
-  ),
-  
-  tar_target(
-    name = sep_layer_featurelist,
-    command = generate_zonation_featurelist(zonation_dir = sep_layer_zonation_directory,
-                                            feature_list = c(mall_reprojected,
-                                                             gadw_reprojected,
-                                                             nopi_reprojected,
-                                                             bwte_reprojected,
-                                                             nsho_reprojected,
-                                                             canv_reprojected,
-                                                             redh_reprojected))
-  ),
-  
-  tar_target(
-    name = sep_layer_settings,
-    command = generate_zonation_settings(zonation_dir = sep_layer_zonation_directory)
-  ),
-  
-  tar_target(
-    name = sep_layer_command,
-    command = generate_zonation_command(zonation_dir = sep_layer_zonation_directory,
-                                        output_dir = sep_layer_output_directory,
-                                        settings_path = sep_layer_settings,
-                                        zonation_mode = "CAZMAX")
-  ),
-  
-  tar_terra_rast(
-    name = sep_layer_rankmap,
-    command = run_zonation(zonation_command_path = sep_layer_command,
-                           output_dir = sep_layer_output_directory)
-  ),
-  
-  tar_terra_vect(
-    name = sep_layer_tl,
-    command = generate_target_landscape(rankmap = sep_layer_rankmap,
-                                        scenario_name = "sep_layer",
-                                        threshold = 0.74,
-                                        min_poly = 156000000,
-                                        max_hole = 70000000,
-                                        smooth = 8)
+  tar_map(
+    values = scenarios,
+    names = scenario_name,
+    tar_target(
+      name = sep_layer_zonation_directory,
+      command = create_zonation_scenario_dir(scenario_name = scenario_name)
+    ),
+    
+    tar_target(
+      name = sep_layer_output_directory,
+      command = create_scenario_output_dir(scenario_name = scenario_name)
+    ),
+    
+    tar_target(
+      name = sep_layer_featurelist,
+      command = generate_zonation_featurelist(zonation_dir = sep_layer_zonation_directory,
+                                              feature_list = c(mall_reprojected,
+                                                               gadw_reprojected,
+                                                               nopi_reprojected,
+                                                               bwte_reprojected,
+                                                               nsho_reprojected,
+                                                               canv_reprojected,
+                                                               redh_reprojected))
+    ),
+    
+    tar_target(
+      name = sep_layer_settings,
+      command = generate_zonation_settings(zonation_dir = sep_layer_zonation_directory)
+    ),
+    
+    tar_target(
+      name = sep_layer_command,
+      command = generate_zonation_command(zonation_dir = sep_layer_zonation_directory,
+                                          output_dir = sep_layer_output_directory,
+                                          settings_path = sep_layer_settings,
+                                          zonation_mode = "CAZMAX")
+    ),
+    
+    tar_terra_rast(
+      name = sep_layer_rankmap,
+      command = run_zonation(zonation_command_path = sep_layer_command,
+                             output_dir = sep_layer_output_directory)
+    ),
+    
+    tar_terra_vect(
+      name = sep_layer_tl,
+      command = generate_target_landscape(rankmap = sep_layer_rankmap,
+                                          scenario_name = scenario_name,
+                                          threshold = threshold,
+                                          min_poly = 156000000,
+                                          max_hole = 70000000,
+                                          smooth = 8)
+    )
   )
   
 )
