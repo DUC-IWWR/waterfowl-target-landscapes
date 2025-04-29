@@ -154,14 +154,12 @@ list(
   ####### 1. Separate species, no NOPI weighting ###############
   tar_target(
     name = sep_layer_zonation_directory,
-    command = create_zonation_scenario_dir(scenario_name = "sep_layer"),
-    format = "file"
+    command = create_zonation_scenario_dir(scenario_name = "sep_layer")
   ),
   
   tar_target(
     name = sep_layer_output_directory,
-    command = create_scenario_output_dir(scenario_name = "sep_layer"),
-    format = "file"
+    command = create_scenario_output_dir(scenario_name = "sep_layer")
   ),
   
   tar_target(
@@ -173,14 +171,12 @@ list(
                                                              bwte_reprojected,
                                                              nsho_reprojected,
                                                              canv_reprojected,
-                                                             redh_reprojected)),
-    format = "file"
+                                                             redh_reprojected))
   ),
   
   tar_target(
     name = sep_layer_settings,
-    command = generate_zonation_settings(zonation_dir = sep_layer_zonation_directory),
-    format = "file"
+    command = generate_zonation_settings(zonation_dir = sep_layer_zonation_directory)
   ),
   
   tar_target(
@@ -188,26 +184,23 @@ list(
     command = generate_zonation_command(zonation_dir = sep_layer_zonation_directory,
                                         output_dir = sep_layer_output_directory,
                                         settings_path = sep_layer_settings,
-                                        zonation_mode = "CAZMAX"),
-    format= "file"
+                                        zonation_mode = "CAZMAX")
   ),
   
-  tar_target(
+  tar_terra_rast(
     name = sep_layer_rankmap,
     command = run_zonation(zonation_command_path = sep_layer_command,
-                           output_dir = sep_layer_output_directory),
-    format = "file"
+                           output_dir = sep_layer_output_directory)
   ),
   
-  tar_target(
+  tar_terra_vect(
     name = sep_layer_tl,
-    command = generate_target_landscape(rankmap_path = sep_layer_rankmap,
+    command = generate_target_landscape(rankmap = sep_layer_rankmap,
                                         scenario_name = "sep_layer",
                                         threshold = 0.74,
                                         min_poly = 156000000,
                                         max_hole = 70000000,
-                                        smooth = 8),
-    format = "file"
+                                        smooth = 8)
   )
   
   
