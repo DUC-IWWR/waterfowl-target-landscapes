@@ -26,11 +26,66 @@ tar_option_set(
 )
 
 scenarios <- tibble::tribble(
-  ~scenario_name, ~zonation_rankmap, ~threshold,
-  "0", quote(separate_layers_rankmap), 0.70,
-  "1", quote(separate_layers_rankmap), 0.71,
-  "2", quote(separate_layers_rankmap), 0.72
+  ~scenario_name, ~zonation_rankmap, ~min_poly, ~threshold,
+  "sep_layers_poly156_thres0.70", quote(separate_layers_rankmap), 156000000, 0.70,
+  "sep_layers_poly156_thres0.72", quote(separate_layers_rankmap), 156000000, 0.72,
+  "sep_layers_poly156_thres0.74", quote(separate_layers_rankmap), 156000000, 0.74,
+  "sep_layers_poly156_thres0.76", quote(separate_layers_rankmap), 156000000, 0.76,
+  "sep_layers_poly156_thres0.78", quote(separate_layers_rankmap), 156000000, 0.78,
+  "sep_layers_poly156_thres0.80", quote(separate_layers_rankmap), 156000000, 0.80,
+  "sep_layers_poly128_thres0.70", quote(separate_layers_rankmap), 128000000, 0.70,
+  "sep_layers_poly128_thres0.72", quote(separate_layers_rankmap), 128000000, 0.72,
+  "sep_layers_poly128_thres0.74", quote(separate_layers_rankmap), 128000000, 0.74,
+  "sep_layers_poly128_thres0.76", quote(separate_layers_rankmap), 128000000, 0.76,
+  "sep_layers_poly128_thres0.78", quote(separate_layers_rankmap), 128000000, 0.78,
+  "sep_layers_poly128_thres0.80", quote(separate_layers_rankmap), 128000000, 0.80,
+  "sep_layers_poly100_thres0.70", quote(separate_layers_rankmap), 100000000, 0.70,
+  "sep_layers_poly100_thres0.72", quote(separate_layers_rankmap), 100000000, 0.72,
+  "sep_layers_poly100_thres0.74", quote(separate_layers_rankmap), 100000000, 0.74,
+  "sep_layers_poly100_thres0.76", quote(separate_layers_rankmap), 100000000, 0.76,
+  "sep_layers_poly100_thres0.78", quote(separate_layers_rankmap), 100000000, 0.78,
+  "sep_layers_poly100_thres0.80", quote(separate_layers_rankmap), 100000000, 0.80,
+  
+  "sep_layers_weighted_poly156_thres0.70", quote(separate_layers_weighted_rankmap), 156000000, 0.70,
+  "sep_layers_weighted_poly156_thres0.72", quote(separate_layers_weighted_rankmap), 156000000, 0.72,
+  "sep_layers_weighted_poly156_thres0.74", quote(separate_layers_weighted_rankmap), 156000000, 0.74,
+  "sep_layers_weighted_poly156_thres0.76", quote(separate_layers_weighted_rankmap), 156000000, 0.76,
+  "sep_layers_weighted_poly156_thres0.78", quote(separate_layers_weighted_rankmap), 156000000, 0.78,
+  "sep_layers_weighted_poly156_thres0.80", quote(separate_layers_weighted_rankmap), 156000000, 0.80,
+  "sep_layers_weighted_poly128_thres0.70", quote(separate_layers_weighted_rankmap), 128000000, 0.70,
+  "sep_layers_weighted_poly128_thres0.72", quote(separate_layers_weighted_rankmap), 128000000, 0.72,
+  "sep_layers_weighted_poly128_thres0.74", quote(separate_layers_weighted_rankmap), 128000000, 0.74,
+  "sep_layers_weighted_poly128_thres0.76", quote(separate_layers_weighted_rankmap), 128000000, 0.76,
+  "sep_layers_weighted_poly128_thres0.78", quote(separate_layers_weighted_rankmap), 128000000, 0.78,
+  "sep_layers_weighted_poly128_thres0.80", quote(separate_layers_weighted_rankmap), 128000000, 0.80,
+  "sep_layers_weighted_poly100_thres0.70", quote(separate_layers_weighted_rankmap), 100000000, 0.70,
+  "sep_layers_weighted_poly100_thres0.72", quote(separate_layers_weighted_rankmap), 100000000, 0.72,
+  "sep_layers_weighted_poly100_thres0.74", quote(separate_layers_weighted_rankmap), 100000000, 0.74,
+  "sep_layers_weighted_poly100_thres0.76", quote(separate_layers_weighted_rankmap), 100000000, 0.76,
+  "sep_layers_weighted_poly100_thres0.78", quote(separate_layers_weighted_rankmap), 100000000, 0.78,
+  "sep_layers_weighted_poly100_thres0.80", quote(separate_layers_weighted_rankmap), 100000000, 0.80,
+  
+  "stacked_layers_poly156_thres0.70", quote(stacked_layers_rankmap), 156000000, 0.70,
+  "stacked_layers_poly156_thres0.72", quote(stacked_layers_rankmap), 156000000, 0.72,
+  "stacked_layers_poly156_thres0.74", quote(stacked_layers_rankmap), 156000000, 0.74,
+  "stacked_layers_poly156_thres0.76", quote(stacked_layers_rankmap), 156000000, 0.76,
+  "stacked_layers_poly156_thres0.78", quote(stacked_layers_rankmap), 156000000, 0.78,
+  "stacked_layers_poly156_thres0.80", quote(stacked_layers_rankmap), 156000000, 0.80,
+  "stacked_layers_poly128_thres0.70", quote(stacked_layers_rankmap), 128000000, 0.70,
+  "stacked_layers_poly128_thres0.72", quote(stacked_layers_rankmap), 128000000, 0.72,
+  "stacked_layers_poly128_thres0.74", quote(stacked_layers_rankmap), 128000000, 0.74,
+  "stacked_layers_poly128_thres0.76", quote(stacked_layers_rankmap), 128000000, 0.76,
+  "stacked_layers_poly128_thres0.78", quote(stacked_layers_rankmap), 128000000, 0.78,
+  "stacked_layers_poly128_thres0.80", quote(stacked_layers_rankmap), 128000000, 0.80,
+  "stacked_layers_poly100_thres0.70", quote(stacked_layers_rankmap), 100000000, 0.70,
+  "stacked_layers_poly100_thres0.72", quote(stacked_layers_rankmap), 100000000, 0.72,
+  "stacked_layers_poly100_thres0.74", quote(stacked_layers_rankmap), 100000000, 0.74,
+  "stacked_layers_poly100_thres0.76", quote(stacked_layers_rankmap), 100000000, 0.76,
+  "stacked_layers_poly100_thres0.78", quote(stacked_layers_rankmap), 100000000, 0.78,
+  "stacked_layers_poly100_thres0.80", quote(stacked_layers_rankmap), 100000000, 0.80,
+  
 )
+
 
 list(
   
@@ -153,7 +208,7 @@ list(
     format = "file"
   ),
   
-  ####### Zonation Scenarios ###################################
+  ####### Zonation Rankmaps #################################
 
   tar_terra_rast(
     name = separate_layers_rankmap,
@@ -181,6 +236,15 @@ list(
                            scenario_name = "separate_layers_weighted",
                            zonation_mode = "CAZMAX")
   ),
+  
+  tar_terra_rast(
+    name = stacked_layers_rankmap,
+    command = run_zonation(feature_list = species_7_reprojected,
+                           scenario_name = "stacked_layers",
+                           zonation_mode = "CAZMAX")
+  ),
+  
+  ####### Scenario Runs #################################
 
   tar_map(
     values = scenarios,
@@ -190,7 +254,7 @@ list(
       command = generate_target_landscape(rankmap = zonation_rankmap,
                                           scenario_name = scenario_name,
                                           threshold = threshold,
-                                          min_poly = 156000000,
+                                          min_poly = min_poly,
                                           max_hole = 70000000,
                                           smooth = 8)
     )
