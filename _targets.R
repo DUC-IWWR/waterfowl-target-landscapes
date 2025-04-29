@@ -167,6 +167,20 @@ list(
                            scenario_name = "separate_layers",
                            zonation_mode = "CAZMAX")
   ),
+  
+  tar_terra_rast(
+    name = separate_layers_weighted_rankmap,
+    command = run_zonation(feature_list = c(mall_reprojected,
+                                            gadw_reprojected,
+                                            nopi_reprojected,
+                                            bwte_reprojected,
+                                            nsho_reprojected,
+                                            canv_reprojected,
+                                            redh_reprojected),
+                           feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
+                           scenario_name = "separate_layers_weighted",
+                           zonation_mode = "CAZMAX")
+  ),
 
   tar_map(
     values = scenarios,
