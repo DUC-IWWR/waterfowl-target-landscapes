@@ -11,6 +11,7 @@ library(targets)
 library(tarchetypes)
 library(geotargets)
 library(tibble)
+library(crew)
 
 tar_source("src/reproject-raster.R")
 tar_source("src/run-zonation.R")
@@ -22,7 +23,8 @@ tar_source("src/plot-target-landscape.R")
 
 # Set target options:
 tar_option_set(
-  packages = c("terra", "sf", "smoothr")
+  packages = c("terra", "sf", "smoothr"),
+  controller = crew_controller_local(workers = 4)
 )
 
 scenarios <- tibble::tribble(
