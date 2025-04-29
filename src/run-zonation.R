@@ -6,7 +6,7 @@ run_zonation <- function(zonation_command_path = NULL,
   
   rankmap_path <- paste0(output_dir, "/rankmap.tif")
   
-  return(rankmap_path)
+  return(rast(rankmap_path))
 }
 
 

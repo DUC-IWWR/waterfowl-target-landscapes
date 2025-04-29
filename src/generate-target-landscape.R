@@ -1,11 +1,10 @@
-generate_target_landscape <- function(rankmap_path = NULL,
+generate_target_landscape <- function(rankmap = NULL,
                                       scenario_name = NULL,
                                       threshold = NULL,
                                       min_poly = NULL,
                                       max_hole = NULL,
                                       smooth = NULL)
 {
-  rankmap <- rast(rankmap_path)
   #reclassify raster based on user-defined threshold
   rcl = matrix(data = c(-0.01,threshold,threshold,1.0,NA,1),
                nrow=2, ncol=3)
@@ -34,5 +33,5 @@ generate_target_landscape <- function(rankmap_path = NULL,
   file = paste0(output_dir, "/TL_", threshold, ".shp")
   st_write(tl_smooth, dsn = file, filetype = "ESRI Shapefile", append = FALSE)
 
-  return(file)
+  return(vect(file))
 }
