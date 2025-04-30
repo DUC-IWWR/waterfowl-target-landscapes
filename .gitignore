@@ -3,3 +3,9 @@
 .RData
 .Ruserdata
 *.tif
+output/target-landscapes/*
+data/generated/*
+output/plots/*
+output/zonation/*
+data/raw/*
+_targets/
