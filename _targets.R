@@ -18,12 +18,13 @@ tar_source("src/run-zonation.R")
 tar_source("src/stack-rasters.R")
 tar_source("src/generate-target-landscape.R")
 tar_source("src/plot-target-landscape.R")
+tar_source("src/calculate-area.R")
 
 ####### Targets ###################################
 
 # Set target options:
 tar_option_set(
-  packages = c("terra", "sf", "smoothr"),
+  packages = c("terra", "smoothr"),
   controller = crew_controller_local(workers = 10)
 )
 
@@ -381,6 +382,10 @@ list(
                                           min_poly = min_poly,
                                           max_hole = max_hole,
                                           smooth = 8)
+    ),
+    tar_target(
+      name = tl_area,
+      command = terra::expanse(tl, unit = "km")
     )
   )
   
