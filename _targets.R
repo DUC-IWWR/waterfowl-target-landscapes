@@ -210,6 +210,67 @@ scenarios <- tibble::tribble(
   "stacked_layers_poly100_thres0.78_hole25", quote(stacked_layers_rankmap), 100000000, 0.78,25000000,
   "stacked_layers_poly100_thres0.80_hole25", quote(stacked_layers_rankmap), 100000000, 0.80,25000000,
   
+  
+  
+  
+  
+  
+  
+  
+  "combined_poly156_thres0.70_hole70", quote(combined_rankmap), 156000000, 0.70,70000000,
+  "combined_poly156_thres0.72_hole70", quote(combined_rankmap), 156000000, 0.72,70000000,
+  "combined_poly156_thres0.74_hole70", quote(combined_rankmap), 156000000, 0.74,70000000,
+  "combined_poly156_thres0.76_hole70", quote(combined_rankmap), 156000000, 0.76,70000000,
+  "combined_poly156_thres0.78_hole70", quote(combined_rankmap), 156000000, 0.78,70000000,
+  "combined_poly156_thres0.80_hole70", quote(combined_rankmap), 156000000, 0.80,70000000,
+  "combined_poly128_thres0.70_hole70", quote(combined_rankmap), 128000000, 0.70,70000000,
+  "combined_poly128_thres0.72_hole70", quote(combined_rankmap), 128000000, 0.72,70000000,
+  "combined_poly128_thres0.74_hole70", quote(combined_rankmap), 128000000, 0.74,70000000,
+  "combined_poly128_thres0.76_hole70", quote(combined_rankmap), 128000000, 0.76,70000000,
+  "combined_poly128_thres0.78_hole70", quote(combined_rankmap), 128000000, 0.78,70000000,
+  "combined_poly128_thres0.80_hole70", quote(combined_rankmap), 128000000, 0.80,70000000,
+  "combined_poly100_thres0.70_hole70", quote(combined_rankmap), 100000000, 0.70,70000000,
+  "combined_poly100_thres0.72_hole70", quote(combined_rankmap), 100000000, 0.72,70000000,
+  "combined_poly100_thres0.74_hole70", quote(combined_rankmap), 100000000, 0.74,70000000,
+  "combined_poly100_thres0.76_hole70", quote(combined_rankmap), 100000000, 0.76,70000000,
+  "combined_poly100_thres0.78_hole70", quote(combined_rankmap), 100000000, 0.78,70000000,
+  "combined_poly100_thres0.80_hole70", quote(combined_rankmap), 100000000, 0.80,70000000,
+  "combined_poly156_thres0.70_hole50", quote(combined_rankmap), 156000000, 0.70,50000000,
+  "combined_poly156_thres0.72_hole50", quote(combined_rankmap), 156000000, 0.72,50000000,
+  "combined_poly156_thres0.74_hole50", quote(combined_rankmap), 156000000, 0.74,50000000,
+  "combined_poly156_thres0.76_hole50", quote(combined_rankmap), 156000000, 0.76,50000000,
+  "combined_poly156_thres0.78_hole50", quote(combined_rankmap), 156000000, 0.78,50000000,
+  "combined_poly156_thres0.80_hole50", quote(combined_rankmap), 156000000, 0.80,50000000,
+  "combined_poly128_thres0.70_hole50", quote(combined_rankmap), 128000000, 0.70,50000000,
+  "combined_poly128_thres0.72_hole50", quote(combined_rankmap), 128000000, 0.72,50000000,
+  "combined_poly128_thres0.74_hole50", quote(combined_rankmap), 128000000, 0.74,50000000,
+  "combined_poly128_thres0.76_hole50", quote(combined_rankmap), 128000000, 0.76,50000000,
+  "combined_poly128_thres0.78_hole50", quote(combined_rankmap), 128000000, 0.78,50000000,
+  "combined_poly128_thres0.80_hole50", quote(combined_rankmap), 128000000, 0.80,50000000,
+  "combined_poly100_thres0.70_hole50", quote(combined_rankmap), 100000000, 0.70,50000000,
+  "combined_poly100_thres0.72_hole50", quote(combined_rankmap), 100000000, 0.72,50000000,
+  "combined_poly100_thres0.74_hole50", quote(combined_rankmap), 100000000, 0.74,50000000,
+  "combined_poly100_thres0.76_hole50", quote(combined_rankmap), 100000000, 0.76,50000000,
+  "combined_poly100_thres0.78_hole50", quote(combined_rankmap), 100000000, 0.78,50000000,
+  "combined_poly100_thres0.80_hole50", quote(combined_rankmap), 100000000, 0.80,50000000,
+  "combined_poly156_thres0.70_hole25", quote(combined_rankmap), 156000000, 0.70,25000000,
+  "combined_poly156_thres0.72_hole25", quote(combined_rankmap), 156000000, 0.72,25000000,
+  "combined_poly156_thres0.74_hole25", quote(combined_rankmap), 156000000, 0.74,25000000,
+  "combined_poly156_thres0.76_hole25", quote(combined_rankmap), 156000000, 0.76,25000000,
+  "combined_poly156_thres0.78_hole25", quote(combined_rankmap), 156000000, 0.78,25000000,
+  "combined_poly156_thres0.80_hole25", quote(combined_rankmap), 156000000, 0.80,25000000,
+  "combined_poly128_thres0.70_hole25", quote(combined_rankmap), 128000000, 0.70,25000000,
+  "combined_poly128_thres0.72_hole25", quote(combined_rankmap), 128000000, 0.72,25000000,
+  "combined_poly128_thres0.74_hole25", quote(combined_rankmap), 128000000, 0.74,25000000,
+  "combined_poly128_thres0.76_hole25", quote(combined_rankmap), 128000000, 0.76,25000000,
+  "combined_poly128_thres0.78_hole25", quote(combined_rankmap), 128000000, 0.78,25000000,
+  "combined_poly128_thres0.80_hole25", quote(combined_rankmap), 128000000, 0.80,25000000,
+  "combined_poly100_thres0.70_hole25", quote(combined_rankmap), 100000000, 0.70,25000000,
+  "combined_poly100_thres0.72_hole25", quote(combined_rankmap), 100000000, 0.72,25000000,
+  "combined_poly100_thres0.74_hole25", quote(combined_rankmap), 100000000, 0.74,25000000,
+  "combined_poly100_thres0.76_hole25", quote(combined_rankmap), 100000000, 0.76,25000000,
+  "combined_poly100_thres0.78_hole25", quote(combined_rankmap), 100000000, 0.78,25000000,
+  "combined_poly100_thres0.80_hole25", quote(combined_rankmap), 100000000, 0.80,25000000,
 )
 
 
@@ -409,6 +470,13 @@ list(
     command = run_zonation(feature_list = species_7_masked,
                            scenario_name = "stacked_layers",
                            zonation_mode = "CAZMAX")
+  ),
+  
+  # and now a Frankenstein version
+  tar_terra_rast(
+    name = combined_rankmap,
+    command = terra::max(stacked_layers_rankmap,
+                         separate_layers_weighted_rankmap)
   ),
   
   ####### Scenario Runs #################################
