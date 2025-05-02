@@ -21,7 +21,7 @@ tar_source("src/plot-target-landscape.R")
 tar_source("src/calculate-tl-area.R")
 tar_source("src/calculate-tl-population.R")
 tar_source("src/mask-raster.R")
-tar_source("calculate-tl-area-province.R")
+tar_source("src/calculate-tl-area-province.R")
 
 ####### Targets ###################################
 
