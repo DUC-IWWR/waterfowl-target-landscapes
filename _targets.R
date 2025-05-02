@@ -18,7 +18,8 @@ tar_source("src/run-zonation.R")
 tar_source("src/stack-rasters.R")
 tar_source("src/generate-target-landscape.R")
 tar_source("src/plot-target-landscape.R")
-tar_source("src/calculate-proportion-area.R")
+tar_source("src/calculate-tl-area.R")
+tar_source("src/calculate-tl-population")
 tar_source("src/mask-raster.R")
 
 ####### Targets ###################################
@@ -495,8 +496,19 @@ list(
     ),
     tar_target(
       name = tl_prop_area,
-      command = calculate_proportion_area(target_landscape = tl,
+      command = calculate_tl_area(target_landscape = tl,
                                           rankmap = zonation_rankmap)
+    ),
+    tar_target(
+      name = tl_prop_population,
+      command = calculate_tl_population(target_landscape = tl,
+                                        species = c(mall_masked,
+                                                   gadw_masked,
+                                                   nopi_masked,
+                                                   bwte_masked,
+                                                   nsho_masked,
+                                                   canv_masked,
+                                                   redh_masked))
     )
   )
   

@@ -1,4 +1,4 @@
-calculate_proportion_area <- function(target_landscape = NULL,
+calculate_tl_area <- function(target_landscape = NULL,
                                       rankmap = NULL)
 {
   crs(target_landscape) <- crs(rankmap)
