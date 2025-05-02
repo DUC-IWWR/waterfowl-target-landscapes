@@ -19,6 +19,7 @@ tar_source("src/stack-rasters.R")
 tar_source("src/generate-target-landscape.R")
 tar_source("src/plot-target-landscape.R")
 tar_source("src/calculate-proportion-area.R")
+tar_source("src/mask-raster.R")
 
 ####### Targets ###################################
 
@@ -214,7 +215,7 @@ scenarios <- tibble::tribble(
 
 list(
   
-  ####### Raw Rasters ###################################
+  ####### Raw Rasters and Shapefiles ####################
   tar_target(
     name = species_7_stacked,
     "data/raw/rasters/7species_perSQK_CopyRaster.tif",
@@ -255,14 +256,21 @@ list(
     "data/raw/rasters/REDH_perSQK_CopyRaster.tif",
     format = "file"
   ),
+  
+  # unsure if this one is needed but we'll see
   tar_target(
     name = tl_old,
     "data/raw/target-landscapes-previous/PHJV_WaterfowlTargetLandscapes.shp",
     format = "file"
   ),
+  tar_target(
+    name = ppr_raw,
+    "data/raw/prairie_ecozone/prairie_ecozone.shp",
+    format = "file"
+  ),
   
   
-  ####### Reprojected Rasters ###################################
+  ####### Reprojected Rasters and Shapefiles ###################################
   tar_target(
     name = species_7_reprojected,
     command = reproject_raster(raster_file = species_7_stacked,
@@ -311,25 +319,59 @@ list(
                                ref = gadw_raw_raster),
     format = "file"
   ),
-  
-  ####### Layer Stacking Targets ###################################
-  
-  # note that "dabblers_stacked" does NOT include pintail
-  tar_target(
-    name = dabblers_stacked,
-    command = stack_rasters(raster_list = c(mall_reprojected,
-                                            gadw_reprojected,
-                                            bwte_reprojected,
-                                            nsho_reprojected),
-                            new_raster_name = "dabblers"),
-    format = "file"
+  tar_terra_vect(
+    name = ppr,
+    command = terra::project(vect(ppr_raw), rast(gadw_raw_raster))
   ),
   
+  ####### Mask Rasters ###################################
+  
   tar_target(
-    name = divers_stacked,
-    command = stack_rasters(raster_list = c(canv_reprojected,
-                                            redh_reprojected),
-                            new_raster_name = "divers"),
+    name = species_7_masked,
+    command = mask_raster(raster_file = species_7_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+    ),
+  tar_target(
+    name = mall_masked,
+    command = mask_raster(raster_file = mall_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+  ),
+  tar_target(
+    name = gadw_masked,
+    command = mask_raster(raster_file = gadw_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+  ),
+  tar_target(
+    name = nsho_masked,
+    command = mask_raster(raster_file = nsho_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+  ),
+  tar_target(
+    name = bwte_masked,
+    command = mask_raster(raster_file = bwte_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+  ),
+  tar_target(
+    name = nopi_masked,
+    command = mask_raster(raster_file = nopi_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+  ),
+  tar_target(
+    name = canv_masked,
+    command = mask_raster(raster_file = canv_reprojected,
+                          mask_vect = ppr),
+    format = "file"
+  ),
+  tar_target(
+    name = redh_masked,
+    command = mask_raster(raster_file = redh_reprojected,
+                          mask_vect = ppr),
     format = "file"
   ),
   
@@ -337,26 +379,26 @@ list(
 
   tar_terra_rast(
     name = separate_layers_rankmap,
-    command = run_zonation(feature_list = c(mall_reprojected,
-                                            gadw_reprojected,
-                                            nopi_reprojected,
-                                            bwte_reprojected,
-                                            nsho_reprojected,
-                                            canv_reprojected,
-                                            redh_reprojected),
+    command = run_zonation(feature_list = c(mall_masked,
+                                            gadw_masked,
+                                            nopi_masked,
+                                            bwte_masked,
+                                            nsho_masked,
+                                            canv_masked,
+                                            redh_masked),
                            scenario_name = "separate_layers",
                            zonation_mode = "CAZMAX")
   ),
   
   tar_terra_rast(
     name = separate_layers_weighted_rankmap,
-    command = run_zonation(feature_list = c(mall_reprojected,
-                                            gadw_reprojected,
-                                            nopi_reprojected,
-                                            bwte_reprojected,
-                                            nsho_reprojected,
-                                            canv_reprojected,
-                                            redh_reprojected),
+    command = run_zonation(feature_list = c(mall_masked,
+                                            gadw_masked,
+                                            nopi_masked,
+                                            bwte_masked,
+                                            nsho_masked,
+                                            canv_masked,
+                                            redh_masked),
                            feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
                            scenario_name = "separate_layers_weighted",
                            zonation_mode = "CAZMAX")
@@ -364,7 +406,7 @@ list(
   
   tar_terra_rast(
     name = stacked_layers_rankmap,
-    command = run_zonation(feature_list = species_7_reprojected,
+    command = run_zonation(feature_list = species_7_masked,
                            scenario_name = "stacked_layers",
                            zonation_mode = "CAZMAX")
   ),
