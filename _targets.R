@@ -18,7 +18,7 @@ tar_source("src/run-zonation.R")
 tar_source("src/stack-rasters.R")
 tar_source("src/generate-target-landscape.R")
 tar_source("src/plot-target-landscape.R")
-tar_source("src/calculate-area.R")
+tar_source("src/calculate-proportion-area.R")
 
 ####### Targets ###################################
 
@@ -384,8 +384,9 @@ list(
                                           smooth = 8)
     ),
     tar_target(
-      name = tl_area,
-      command = terra::expanse(tl, unit = "km")
+      name = tl_prop_area,
+      command = calculate_proportion_area(target_landscape = tl,
+                                          rankmap = zonation_rankmap)
     )
   )
   
