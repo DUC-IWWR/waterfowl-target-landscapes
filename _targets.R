@@ -19,8 +19,9 @@ tar_source("src/stack-rasters.R")
 tar_source("src/generate-target-landscape.R")
 tar_source("src/plot-target-landscape.R")
 tar_source("src/calculate-tl-area.R")
-tar_source("src/calculate-tl-population")
+tar_source("src/calculate-tl-population.R")
 tar_source("src/mask-raster.R")
+tar_source("calculate-tl-area-province.R")
 
 ####### Targets ###################################
 
@@ -330,6 +331,11 @@ list(
     "data/raw/prairie_ecozone/prairie_ecozone.shp",
     format = "file"
   ),
+  tar_target(
+    name = provinces_raw,
+    "data/raw/provinces/Canada_PROV.shp",
+    format = "file"
+  ),
   
   
   ####### Reprojected Rasters and Shapefiles ###################################
@@ -381,9 +387,15 @@ list(
                                ref = gadw_raw_raster),
     format = "file"
   ),
+  
   tar_terra_vect(
     name = ppr,
     command = terra::project(vect(ppr_raw), rast(gadw_raw_raster))
+  ),
+  tar_terra_vect(
+    name = provinces,
+    command = terra::project(vect(provinces_raw),
+                             rast(gadw_raw_raster))
   ),
   
   ####### Mask Rasters ###################################
@@ -476,8 +488,7 @@ list(
   # and now a Frankenstein version
   tar_terra_rast(
     name = combined_rankmap,
-    command = terra::max(stacked_layers_rankmap,
-                         separate_layers_weighted_rankmap)
+    command = max(stacked_layers_rankmap, separate_layers_weighted_rankmap)
   ),
   
   ####### Scenario Runs #################################
@@ -509,6 +520,12 @@ list(
                                                    nsho_masked,
                                                    canv_masked,
                                                    redh_masked))
+    ),
+    tar_target(
+      name = tl_prop_area_province,
+      command = calculate_tl_area_province(target_landscape = tl,
+                                           provinces = provinces,
+                                           rankmap = zonation_rankmap)
     )
   )
   
