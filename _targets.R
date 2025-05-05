@@ -526,7 +526,11 @@ list(
       command = calculate_tl_area_province(target_landscape = tl,
                                            provinces = provinces,
                                            rankmap = zonation_rankmap)
+    ),
+    tar_target(
+      name = tl_prop_total_population,
+      command = calculate_tl_population(target_landscape = tl,
+                                        species = c(species_7_masked))
     )
   )
-  
 )
