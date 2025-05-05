@@ -54,7 +54,10 @@ run_zonation <- function(feature_list = NULL,
   cmd_file <- file(cmd_filename)
   cmd_string <- "@setlocal\n"
   cmd_string <- paste0(cmd_string, "@PATH=C:\\Program Files (x86)\\Zonation5;%PATH%\n")
-  cmd_string <- paste0(cmd_string, "z5_16bit --mode=CAZMAX ")
+  cmd_string <- paste0(cmd_string, "z5_16bit ")
+  cmd_string <- ifelse(!is.null(feature_weights),
+                       paste0(cmd_string, "-w --mode=CAZMAX "),
+                       paste0(cmd_string, "--mode=CAZMAX "))
   cmd_string <- paste0(cmd_string, "data/generated/zonation/", scenario_name, "_", zonation_mode, ".z5 ")
   cmd_string <- paste0(cmd_string, "output/zonation/", scenario_name, "_", zonation_mode, "\n@pause")
   writeLines(cmd_string, cmd_file)
