@@ -11,6 +11,8 @@ calculate_tl_population <- function(target_landscape = NULL,
       crs(target_landscape) <- crs(species[[i]])
     }
     
+    species[[i]] <- species[[i]] * 0.16
+    
     pop_df <- extract(species[[i]], target_landscape)
     population[i] <- sum(pop_df[,2], na.rm = TRUE) / sum(rowSums(species[[i]], na.rm = TRUE))
   }
