@@ -33,82 +33,82 @@ tar_option_set(
 
 scenarios <- tibble::tribble(
   ~scenario_name, ~zonation_rankmap, ~min_poly, ~threshold,
-  "sep_layers_poly156_thres0.70_hole70", quote(separate_layers_rankmap), 156000000, 0.70,
-  "sep_layers_poly156_thres0.72_hole70", quote(separate_layers_rankmap), 156000000, 0.72,
-  "sep_layers_poly156_thres0.74_hole70", quote(separate_layers_rankmap), 156000000, 0.74,
-  "sep_layers_poly156_thres0.76_hole70", quote(separate_layers_rankmap), 156000000, 0.76,
-  "sep_layers_poly156_thres0.78_hole70", quote(separate_layers_rankmap), 156000000, 0.78,
-  "sep_layers_poly156_thres0.80_hole70", quote(separate_layers_rankmap), 156000000, 0.80,
-  "sep_layers_poly128_thres0.70_hole70", quote(separate_layers_rankmap), 128000000, 0.70,
-  "sep_layers_poly128_thres0.72_hole70", quote(separate_layers_rankmap), 128000000, 0.72,
-  "sep_layers_poly128_thres0.74_hole70", quote(separate_layers_rankmap), 128000000, 0.74,
-  "sep_layers_poly128_thres0.76_hole70", quote(separate_layers_rankmap), 128000000, 0.76,
-  "sep_layers_poly128_thres0.78_hole70", quote(separate_layers_rankmap), 128000000, 0.78,
-  "sep_layers_poly128_thres0.80_hole70", quote(separate_layers_rankmap), 128000000, 0.80,
-  "sep_layers_poly100_thres0.70_hole70", quote(separate_layers_rankmap), 100000000, 0.70,
-  "sep_layers_poly100_thres0.72_hole70", quote(separate_layers_rankmap), 100000000, 0.72,
-  "sep_layers_poly100_thres0.74_hole70", quote(separate_layers_rankmap), 100000000, 0.74,
-  "sep_layers_poly100_thres0.76_hole70", quote(separate_layers_rankmap), 100000000, 0.76,
-  "sep_layers_poly100_thres0.78_hole70", quote(separate_layers_rankmap), 100000000, 0.78,
-  "sep_layers_poly100_thres0.80_hole70", quote(separate_layers_rankmap), 100000000, 0.80,
+  "sep_layers_poly156_thres0.70", quote(separate_layers_rankmap), 156000000, 0.70,
+  "sep_layers_poly156_thres0.72", quote(separate_layers_rankmap), 156000000, 0.72,
+  "sep_layers_poly156_thres0.74", quote(separate_layers_rankmap), 156000000, 0.74,
+  "sep_layers_poly156_thres0.76", quote(separate_layers_rankmap), 156000000, 0.76,
+  "sep_layers_poly156_thres0.78", quote(separate_layers_rankmap), 156000000, 0.78,
+  "sep_layers_poly156_thres0.80", quote(separate_layers_rankmap), 156000000, 0.80,
+  "sep_layers_poly128_thres0.70", quote(separate_layers_rankmap), 128000000, 0.70,
+  "sep_layers_poly128_thres0.72", quote(separate_layers_rankmap), 128000000, 0.72,
+  "sep_layers_poly128_thres0.74", quote(separate_layers_rankmap), 128000000, 0.74,
+  "sep_layers_poly128_thres0.76", quote(separate_layers_rankmap), 128000000, 0.76,
+  "sep_layers_poly128_thres0.78", quote(separate_layers_rankmap), 128000000, 0.78,
+  "sep_layers_poly128_thres0.80", quote(separate_layers_rankmap), 128000000, 0.80,
+  "sep_layers_poly100_thres0.70", quote(separate_layers_rankmap), 100000000, 0.70,
+  "sep_layers_poly100_thres0.72", quote(separate_layers_rankmap), 100000000, 0.72,
+  "sep_layers_poly100_thres0.74", quote(separate_layers_rankmap), 100000000, 0.74,
+  "sep_layers_poly100_thres0.76", quote(separate_layers_rankmap), 100000000, 0.76,
+  "sep_layers_poly100_thres0.78", quote(separate_layers_rankmap), 100000000, 0.78,
+  "sep_layers_poly100_thres0.80", quote(separate_layers_rankmap), 100000000, 0.80,
   
-  "sep_layers_weighted_poly156_thres0.70_hole70", quote(separate_layers_weighted_rankmap), 156000000, 0.70,
-  "sep_layers_weighted_poly156_thres0.72_hole70", quote(separate_layers_weighted_rankmap), 156000000, 0.72,
-  "sep_layers_weighted_poly156_thres0.74_hole70", quote(separate_layers_weighted_rankmap), 156000000, 0.74,
-  "sep_layers_weighted_poly156_thres0.76_hole70", quote(separate_layers_weighted_rankmap), 156000000, 0.76,
-  "sep_layers_weighted_poly156_thres0.78_hole70", quote(separate_layers_weighted_rankmap), 156000000, 0.78,
-  "sep_layers_weighted_poly156_thres0.80_hole70", quote(separate_layers_weighted_rankmap), 156000000, 0.80,
-  "sep_layers_weighted_poly128_thres0.70_hole70", quote(separate_layers_weighted_rankmap), 128000000, 0.70,
-  "sep_layers_weighted_poly128_thres0.72_hole70", quote(separate_layers_weighted_rankmap), 128000000, 0.72,
-  "sep_layers_weighted_poly128_thres0.74_hole70", quote(separate_layers_weighted_rankmap), 128000000, 0.74,
-  "sep_layers_weighted_poly128_thres0.76_hole70", quote(separate_layers_weighted_rankmap), 128000000, 0.76,
-  "sep_layers_weighted_poly128_thres0.78_hole70", quote(separate_layers_weighted_rankmap), 128000000, 0.78,
-  "sep_layers_weighted_poly128_thres0.80_hole70", quote(separate_layers_weighted_rankmap), 128000000, 0.80,
-  "sep_layers_weighted_poly100_thres0.70_hole70", quote(separate_layers_weighted_rankmap), 100000000, 0.70,
-  "sep_layers_weighted_poly100_thres0.72_hole70", quote(separate_layers_weighted_rankmap), 100000000, 0.72,
-  "sep_layers_weighted_poly100_thres0.74_hole70", quote(separate_layers_weighted_rankmap), 100000000, 0.74,
-  "sep_layers_weighted_poly100_thres0.76_hole70", quote(separate_layers_weighted_rankmap), 100000000, 0.76,
-  "sep_layers_weighted_poly100_thres0.78_hole70", quote(separate_layers_weighted_rankmap), 100000000, 0.78,
-  "sep_layers_weighted_poly100_thres0.80_hole70", quote(separate_layers_weighted_rankmap), 100000000, 0.80,
+  "sep_layers_weighted_poly156_thres0.70", quote(separate_layers_weighted_rankmap), 156000000, 0.70,
+  "sep_layers_weighted_poly156_thres0.72", quote(separate_layers_weighted_rankmap), 156000000, 0.72,
+  "sep_layers_weighted_poly156_thres0.74", quote(separate_layers_weighted_rankmap), 156000000, 0.74,
+  "sep_layers_weighted_poly156_thres0.76", quote(separate_layers_weighted_rankmap), 156000000, 0.76,
+  "sep_layers_weighted_poly156_thres0.78", quote(separate_layers_weighted_rankmap), 156000000, 0.78,
+  "sep_layers_weighted_poly156_thres0.80", quote(separate_layers_weighted_rankmap), 156000000, 0.80,
+  "sep_layers_weighted_poly128_thres0.70", quote(separate_layers_weighted_rankmap), 128000000, 0.70,
+  "sep_layers_weighted_poly128_thres0.72", quote(separate_layers_weighted_rankmap), 128000000, 0.72,
+  "sep_layers_weighted_poly128_thres0.74", quote(separate_layers_weighted_rankmap), 128000000, 0.74,
+  "sep_layers_weighted_poly128_thres0.76", quote(separate_layers_weighted_rankmap), 128000000, 0.76,
+  "sep_layers_weighted_poly128_thres0.78", quote(separate_layers_weighted_rankmap), 128000000, 0.78,
+  "sep_layers_weighted_poly128_thres0.80", quote(separate_layers_weighted_rankmap), 128000000, 0.80,
+  "sep_layers_weighted_poly100_thres0.70", quote(separate_layers_weighted_rankmap), 100000000, 0.70,
+  "sep_layers_weighted_poly100_thres0.72", quote(separate_layers_weighted_rankmap), 100000000, 0.72,
+  "sep_layers_weighted_poly100_thres0.74", quote(separate_layers_weighted_rankmap), 100000000, 0.74,
+  "sep_layers_weighted_poly100_thres0.76", quote(separate_layers_weighted_rankmap), 100000000, 0.76,
+  "sep_layers_weighted_poly100_thres0.78", quote(separate_layers_weighted_rankmap), 100000000, 0.78,
+  "sep_layers_weighted_poly100_thres0.80", quote(separate_layers_weighted_rankmap), 100000000, 0.80,
   
-  "stacked_layers_poly156_thres0.70_hole70", quote(stacked_layers_rankmap), 156000000, 0.70,
-  "stacked_layers_poly156_thres0.72_hole70", quote(stacked_layers_rankmap), 156000000, 0.72,
-  "stacked_layers_poly156_thres0.74_hole70", quote(stacked_layers_rankmap), 156000000, 0.74,
-  "stacked_layers_poly156_thres0.76_hole70", quote(stacked_layers_rankmap), 156000000, 0.76,
-  "stacked_layers_poly156_thres0.78_hole70", quote(stacked_layers_rankmap), 156000000, 0.78,
-  "stacked_layers_poly156_thres0.80_hole70", quote(stacked_layers_rankmap), 156000000, 0.80,
-  "stacked_layers_poly128_thres0.70_hole70", quote(stacked_layers_rankmap), 128000000, 0.70,
-  "stacked_layers_poly128_thres0.72_hole70", quote(stacked_layers_rankmap), 128000000, 0.72,
-  "stacked_layers_poly128_thres0.74_hole70", quote(stacked_layers_rankmap), 128000000, 0.74,
-  "stacked_layers_poly128_thres0.76_hole70", quote(stacked_layers_rankmap), 128000000, 0.76,
-  "stacked_layers_poly128_thres0.78_hole70", quote(stacked_layers_rankmap), 128000000, 0.78,
-  "stacked_layers_poly128_thres0.80_hole70", quote(stacked_layers_rankmap), 128000000, 0.80,
-  "stacked_layers_poly100_thres0.70_hole70", quote(stacked_layers_rankmap), 100000000, 0.70,
-  "stacked_layers_poly100_thres0.72_hole70", quote(stacked_layers_rankmap), 100000000, 0.72,
-  "stacked_layers_poly100_thres0.74_hole70", quote(stacked_layers_rankmap), 100000000, 0.74,
-  "stacked_layers_poly100_thres0.76_hole70", quote(stacked_layers_rankmap), 100000000, 0.76,
-  "stacked_layers_poly100_thres0.78_hole70", quote(stacked_layers_rankmap), 100000000, 0.78,
-  "stacked_layers_poly100_thres0.80_hole70", quote(stacked_layers_rankmap), 100000000, 0.80,
+  "stacked_layers_poly156_thres0.70", quote(stacked_layers_rankmap), 156000000, 0.70,
+  "stacked_layers_poly156_thres0.72", quote(stacked_layers_rankmap), 156000000, 0.72,
+  "stacked_layers_poly156_thres0.74", quote(stacked_layers_rankmap), 156000000, 0.74,
+  "stacked_layers_poly156_thres0.76", quote(stacked_layers_rankmap), 156000000, 0.76,
+  "stacked_layers_poly156_thres0.78", quote(stacked_layers_rankmap), 156000000, 0.78,
+  "stacked_layers_poly156_thres0.80", quote(stacked_layers_rankmap), 156000000, 0.80,
+  "stacked_layers_poly128_thres0.70", quote(stacked_layers_rankmap), 128000000, 0.70,
+  "stacked_layers_poly128_thres0.72", quote(stacked_layers_rankmap), 128000000, 0.72,
+  "stacked_layers_poly128_thres0.74", quote(stacked_layers_rankmap), 128000000, 0.74,
+  "stacked_layers_poly128_thres0.76", quote(stacked_layers_rankmap), 128000000, 0.76,
+  "stacked_layers_poly128_thres0.78", quote(stacked_layers_rankmap), 128000000, 0.78,
+  "stacked_layers_poly128_thres0.80", quote(stacked_layers_rankmap), 128000000, 0.80,
+  "stacked_layers_poly100_thres0.70", quote(stacked_layers_rankmap), 100000000, 0.70,
+  "stacked_layers_poly100_thres0.72", quote(stacked_layers_rankmap), 100000000, 0.72,
+  "stacked_layers_poly100_thres0.74", quote(stacked_layers_rankmap), 100000000, 0.74,
+  "stacked_layers_poly100_thres0.76", quote(stacked_layers_rankmap), 100000000, 0.76,
+  "stacked_layers_poly100_thres0.78", quote(stacked_layers_rankmap), 100000000, 0.78,
+  "stacked_layers_poly100_thres0.80", quote(stacked_layers_rankmap), 100000000, 0.80,
   
   
-  "combined_poly156_thres0.70_hole70", quote(combined_rankmap), 156000000, 0.70,
-  "combined_poly156_thres0.72_hole70", quote(combined_rankmap), 156000000, 0.72,
-  "combined_poly156_thres0.74_hole70", quote(combined_rankmap), 156000000, 0.74,
-  "combined_poly156_thres0.76_hole70", quote(combined_rankmap), 156000000, 0.76,
-  "combined_poly156_thres0.78_hole70", quote(combined_rankmap), 156000000, 0.78,
-  "combined_poly156_thres0.80_hole70", quote(combined_rankmap), 156000000, 0.80,
-  "combined_poly128_thres0.70_hole70", quote(combined_rankmap), 128000000, 0.70,
-  "combined_poly128_thres0.72_hole70", quote(combined_rankmap), 128000000, 0.72,
-  "combined_poly128_thres0.74_hole70", quote(combined_rankmap), 128000000, 0.74,
-  "combined_poly128_thres0.76_hole70", quote(combined_rankmap), 128000000, 0.76,
-  "combined_poly128_thres0.78_hole70", quote(combined_rankmap), 128000000, 0.78,
-  "combined_poly128_thres0.80_hole70", quote(combined_rankmap), 128000000, 0.80,
-  "combined_poly100_thres0.70_hole70", quote(combined_rankmap), 100000000, 0.70,
-  "combined_poly100_thres0.72_hole70", quote(combined_rankmap), 100000000, 0.72,
-  "combined_poly100_thres0.74_hole70", quote(combined_rankmap), 100000000, 0.74,
-  "combined_poly100_thres0.76_hole70", quote(combined_rankmap), 100000000, 0.76,
-  "combined_poly100_thres0.78_hole70", quote(combined_rankmap), 100000000, 0.78,
-  "combined_poly100_thres0.80_hole70", quote(combined_rankmap), 100000000, 0.80,
+  "combined_poly156_thres0.70", quote(combined_rankmap), 156000000, 0.70,
+  "combined_poly156_thres0.72", quote(combined_rankmap), 156000000, 0.72,
+  "combined_poly156_thres0.74", quote(combined_rankmap), 156000000, 0.74,
+  "combined_poly156_thres0.76", quote(combined_rankmap), 156000000, 0.76,
+  "combined_poly156_thres0.78", quote(combined_rankmap), 156000000, 0.78,
+  "combined_poly156_thres0.80", quote(combined_rankmap), 156000000, 0.80,
+  "combined_poly128_thres0.70", quote(combined_rankmap), 128000000, 0.70,
+  "combined_poly128_thres0.72", quote(combined_rankmap), 128000000, 0.72,
+  "combined_poly128_thres0.74", quote(combined_rankmap), 128000000, 0.74,
+  "combined_poly128_thres0.76", quote(combined_rankmap), 128000000, 0.76,
+  "combined_poly128_thres0.78", quote(combined_rankmap), 128000000, 0.78,
+  "combined_poly128_thres0.80", quote(combined_rankmap), 128000000, 0.80,
+  "combined_poly100_thres0.70", quote(combined_rankmap), 100000000, 0.70,
+  "combined_poly100_thres0.72", quote(combined_rankmap), 100000000, 0.72,
+  "combined_poly100_thres0.74", quote(combined_rankmap), 100000000, 0.74,
+  "combined_poly100_thres0.76", quote(combined_rankmap), 100000000, 0.76,
+  "combined_poly100_thres0.78", quote(combined_rankmap), 100000000, 0.78,
+  "combined_poly100_thres0.80", quote(combined_rankmap), 100000000, 0.80,
 )
 
 
@@ -162,15 +162,13 @@ list(
     "data/raw/target-landscapes-previous/PHJV_WaterfowlTargetLandscapes.shp",
     format = "file"
   ),
-  tar_target(
-    name = ppr_raw,
-    "data/raw/prairie_ecozone/prairie_ecozone.shp",
-    format = "file"
+  tar_terra_vect(
+    name = phjv,
+    vect("data/raw/PHJV_projected/PHJV_projected.shp")
   ),
-  tar_target(
-    name = provinces_raw,
-    "data/raw/provinces/Canada_PROV.shp",
-    format = "file"
+  tar_terra_vect(
+    name = provinces,
+    vect("data/raw/Provinces_projected/Provinces_projected.shp")
   ),
   
   
@@ -224,64 +222,54 @@ list(
     format = "file"
   ),
   
-  tar_terra_vect(
-    name = ppr,
-    command = terra::project(vect(ppr_raw), rast(gadw_raw_raster))
-  ),
-  tar_terra_vect(
-    name = provinces,
-    command = terra::project(vect(provinces_raw),
-                             rast(gadw_raw_raster))
-  ),
-  
   ####### Mask Rasters ###################################
   
   tar_target(
     name = species_7_masked,
     command = mask_raster(raster_file = species_7_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
     ),
   tar_target(
     name = mall_masked,
     command = mask_raster(raster_file = mall_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   tar_target(
     name = gadw_masked,
     command = mask_raster(raster_file = gadw_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   tar_target(
     name = nsho_masked,
     command = mask_raster(raster_file = nsho_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   tar_target(
     name = bwte_masked,
     command = mask_raster(raster_file = bwte_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   tar_target(
     name = nopi_masked,
     command = mask_raster(raster_file = nopi_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   tar_target(
     name = canv_masked,
     command = mask_raster(raster_file = canv_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   tar_target(
     name = redh_masked,
     command = mask_raster(raster_file = redh_reprojected,
-                          mask_vect = ppr),
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
   
@@ -344,7 +332,7 @@ list(
     tar_target(
       name = tl_prop_area,
       command = calculate_tl_area(target_landscape = tl,
-                                          rankmap = zonation_rankmap)
+                                  rankmap = zonation_rankmap)
     ),
     tar_target(
       name = tl_prop_population,
