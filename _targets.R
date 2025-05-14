@@ -22,6 +22,7 @@ tar_source("src/calculate-tl-area.R")
 tar_source("src/calculate-tl-population.R")
 tar_source("src/mask-raster.R")
 tar_source("src/calculate-tl-area-province.R")
+tar_source("src/calculate-tl-population-province.R")
 
 ####### Targets ###################################
 
@@ -337,7 +338,7 @@ list(
     tar_target(
       name = tl_prop_population,
       command = calculate_tl_population(target_landscape = tl,
-                                        species = c(mall_masked,
+                                        species_list = c(mall_masked,
                                                    gadw_masked,
                                                    nopi_masked,
                                                    bwte_masked,
@@ -352,9 +353,22 @@ list(
                                            rankmap = zonation_rankmap)
     ),
     tar_target(
+      name = tl_prop_population_province,
+      command = calculate_tl_population_province(target_landscape = tl,
+                                                 species_list = c(mall_masked,
+                                                             gadw_masked,
+                                                             nopi_masked,
+                                                             bwte_masked,
+                                                             nsho_masked,
+                                                             canv_masked,
+                                                             redh_masked,
+                                                             species_7_masked),
+                                                 provinces = provinces)
+    ),
+    tar_target(
       name = tl_prop_total_population,
       command = calculate_tl_population(target_landscape = tl,
-                                        species = c(species_7_masked))
+                                        species_list = c(species_7_masked))
     )
   )
 )
