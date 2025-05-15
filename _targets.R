@@ -3,7 +3,7 @@
 # Waterfowl Target Landscapes
 # _targets.R
 # Created April 2025
-# Last Updated April 2025
+# Last Updated May 2025
 
 ####### Import Libraries and External Files #######
 
@@ -156,12 +156,16 @@ list(
     "data/raw/rasters/REDH_perSQK_CopyRaster.tif",
     format = "file"
   ),
+  tar_target(
+    name = dss_v2_raster,
+    "data/raw/rasters/DSS_v2.tif",
+    format = "file"
+  ),
   
   # unsure if this one is needed but we'll see
-  tar_target(
+  tar_terra_vect(
     name = tl_old,
-    "data/raw/target-landscapes-previous/PHJV_WaterfowlTargetLandscapes.shp",
-    format = "file"
+    vect("data/raw/target-landscapes-previous/PHJV_WaterfowlTargetLandscapes.shp")
   ),
   tar_terra_vect(
     name = phjv,
@@ -171,6 +175,7 @@ list(
     name = provinces,
     vect("data/raw/Provinces_projected/Provinces_projected.shp")
   ),
+
   
   
   ####### Reprojected Rasters and Shapefiles ###################################
@@ -222,6 +227,16 @@ list(
                                ref = gadw_raw_raster),
     format = "file"
   ),
+  tar_target(
+    name = dss_v2_reprojected,
+    command = reproject_raster(raster_file = dss_v2_raster,
+                               ref = gadw_raw_raster),
+    format = "file"
+  ),
+  tar_terra_vect(
+    name = tl_old_projected,
+    command = project(tl_old, rast(gadw_raw_raster))
+  ),
   
   ####### Mask Rasters ###################################
   
@@ -270,6 +285,12 @@ list(
   tar_target(
     name = redh_masked,
     command = mask_raster(raster_file = redh_reprojected,
+                          mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
+    format = "file"
+  ),
+  tar_target(
+    name = dss_v2_masked,
+    command = mask_raster(raster_file = dss_v2_reprojected,
                           mask_vect = phjv[which(phjv$CA_REGION == "PPR"),]),
     format = "file"
   ),
@@ -370,5 +391,31 @@ list(
       command = calculate_tl_population(target_landscape = tl,
                                         species_list = c(species_7_masked))
     )
+  ),
+  tar_target(
+    name = dss_v2_prop_area,
+    command = calculate_tl_area(target_landscape = aggregate(tl_old_projected,
+                                                             dissolve = TRUE),
+                                rankmap = rast(dss_v2_masked))
+  ),
+  tar_target(
+    name = dss_v2_prop_population,
+    command = calculate_tl_population(target_landscape = aggregate(tl_old_projected,
+                                                                   dissolve = TRUE),
+                                      species_list = c(dss_v2_masked))
+  ),
+  tar_target(
+    name = dss_v2_prop_population_province,
+    command = calculate_tl_population_province(target_landscape = aggregate(tl_old_projected,
+                                                                            dissolve = TRUE),
+                                               species_list = c(dss_v2_masked),
+                                               provinces = provinces)
+  ),
+  tar_target(
+    name = dss_v2_prop_area_province,
+    command = calculate_tl_area_province(target_landscape = aggregate(tl_old_projected,
+                                                                      dissolve = TRUE),
+                                         provinces = provinces,
+                                         rankmap = rast(dss_v2_masked))
   )
 )
