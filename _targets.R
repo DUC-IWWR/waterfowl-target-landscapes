@@ -25,6 +25,7 @@ tar_source("src/calculate-tl-area-province.R")
 tar_source("src/calculate-tl-population-province.R")
 tar_source("src/wrangle-df.R")
 tar_source("src/plotting-functions.R")
+tar_source("src/generate-scenarios.R")
 
 ####### Targets ###################################
 
@@ -34,85 +35,86 @@ tar_option_set(
   controller = crew_controller_local(workers = 10)
 )
 
-scenarios <- tibble::tribble(
-  ~scenario_name, ~zonation_rankmap, ~min_poly, ~threshold,
-  "sep_layers_poly156_thres0.70", quote(separate_layers_rankmap), 156000000, 0.70,
-  "sep_layers_poly156_thres0.72", quote(separate_layers_rankmap), 156000000, 0.72,
-  "sep_layers_poly156_thres0.74", quote(separate_layers_rankmap), 156000000, 0.74,
-  "sep_layers_poly156_thres0.76", quote(separate_layers_rankmap), 156000000, 0.76,
-  "sep_layers_poly156_thres0.78", quote(separate_layers_rankmap), 156000000, 0.78,
-  "sep_layers_poly156_thres0.80", quote(separate_layers_rankmap), 156000000, 0.80,
-  "sep_layers_poly128_thres0.70", quote(separate_layers_rankmap), 128000000, 0.70,
-  "sep_layers_poly128_thres0.72", quote(separate_layers_rankmap), 128000000, 0.72,
-  "sep_layers_poly128_thres0.74", quote(separate_layers_rankmap), 128000000, 0.74,
-  "sep_layers_poly128_thres0.76", quote(separate_layers_rankmap), 128000000, 0.76,
-  "sep_layers_poly128_thres0.78", quote(separate_layers_rankmap), 128000000, 0.78,
-  "sep_layers_poly128_thres0.80", quote(separate_layers_rankmap), 128000000, 0.80,
-  "sep_layers_poly100_thres0.70", quote(separate_layers_rankmap), 100000000, 0.70,
-  "sep_layers_poly100_thres0.72", quote(separate_layers_rankmap), 100000000, 0.72,
-  "sep_layers_poly100_thres0.74", quote(separate_layers_rankmap), 100000000, 0.74,
-  "sep_layers_poly100_thres0.76", quote(separate_layers_rankmap), 100000000, 0.76,
-  "sep_layers_poly100_thres0.78", quote(separate_layers_rankmap), 100000000, 0.78,
-  "sep_layers_poly100_thres0.80", quote(separate_layers_rankmap), 100000000, 0.80,
-  
-  "sep_layers_weighted_poly156_thres0.70", quote(separate_layers_weighted_rankmap), 156000000, 0.70,
-  "sep_layers_weighted_poly156_thres0.72", quote(separate_layers_weighted_rankmap), 156000000, 0.72,
-  "sep_layers_weighted_poly156_thres0.74", quote(separate_layers_weighted_rankmap), 156000000, 0.74,
-  "sep_layers_weighted_poly156_thres0.76", quote(separate_layers_weighted_rankmap), 156000000, 0.76,
-  "sep_layers_weighted_poly156_thres0.78", quote(separate_layers_weighted_rankmap), 156000000, 0.78,
-  "sep_layers_weighted_poly156_thres0.80", quote(separate_layers_weighted_rankmap), 156000000, 0.80,
-  "sep_layers_weighted_poly128_thres0.70", quote(separate_layers_weighted_rankmap), 128000000, 0.70,
-  "sep_layers_weighted_poly128_thres0.72", quote(separate_layers_weighted_rankmap), 128000000, 0.72,
-  "sep_layers_weighted_poly128_thres0.74", quote(separate_layers_weighted_rankmap), 128000000, 0.74,
-  "sep_layers_weighted_poly128_thres0.76", quote(separate_layers_weighted_rankmap), 128000000, 0.76,
-  "sep_layers_weighted_poly128_thres0.78", quote(separate_layers_weighted_rankmap), 128000000, 0.78,
-  "sep_layers_weighted_poly128_thres0.80", quote(separate_layers_weighted_rankmap), 128000000, 0.80,
-  "sep_layers_weighted_poly100_thres0.70", quote(separate_layers_weighted_rankmap), 100000000, 0.70,
-  "sep_layers_weighted_poly100_thres0.72", quote(separate_layers_weighted_rankmap), 100000000, 0.72,
-  "sep_layers_weighted_poly100_thres0.74", quote(separate_layers_weighted_rankmap), 100000000, 0.74,
-  "sep_layers_weighted_poly100_thres0.76", quote(separate_layers_weighted_rankmap), 100000000, 0.76,
-  "sep_layers_weighted_poly100_thres0.78", quote(separate_layers_weighted_rankmap), 100000000, 0.78,
-  "sep_layers_weighted_poly100_thres0.80", quote(separate_layers_weighted_rankmap), 100000000, 0.80,
-  
-  "stacked_layers_poly156_thres0.70", quote(stacked_layers_rankmap), 156000000, 0.70,
-  "stacked_layers_poly156_thres0.72", quote(stacked_layers_rankmap), 156000000, 0.72,
-  "stacked_layers_poly156_thres0.74", quote(stacked_layers_rankmap), 156000000, 0.74,
-  "stacked_layers_poly156_thres0.76", quote(stacked_layers_rankmap), 156000000, 0.76,
-  "stacked_layers_poly156_thres0.78", quote(stacked_layers_rankmap), 156000000, 0.78,
-  "stacked_layers_poly156_thres0.80", quote(stacked_layers_rankmap), 156000000, 0.80,
-  "stacked_layers_poly128_thres0.70", quote(stacked_layers_rankmap), 128000000, 0.70,
-  "stacked_layers_poly128_thres0.72", quote(stacked_layers_rankmap), 128000000, 0.72,
-  "stacked_layers_poly128_thres0.74", quote(stacked_layers_rankmap), 128000000, 0.74,
-  "stacked_layers_poly128_thres0.76", quote(stacked_layers_rankmap), 128000000, 0.76,
-  "stacked_layers_poly128_thres0.78", quote(stacked_layers_rankmap), 128000000, 0.78,
-  "stacked_layers_poly128_thres0.80", quote(stacked_layers_rankmap), 128000000, 0.80,
-  "stacked_layers_poly100_thres0.70", quote(stacked_layers_rankmap), 100000000, 0.70,
-  "stacked_layers_poly100_thres0.72", quote(stacked_layers_rankmap), 100000000, 0.72,
-  "stacked_layers_poly100_thres0.74", quote(stacked_layers_rankmap), 100000000, 0.74,
-  "stacked_layers_poly100_thres0.76", quote(stacked_layers_rankmap), 100000000, 0.76,
-  "stacked_layers_poly100_thres0.78", quote(stacked_layers_rankmap), 100000000, 0.78,
-  "stacked_layers_poly100_thres0.80", quote(stacked_layers_rankmap), 100000000, 0.80,
-  
-  
-  "combined_poly156_thres0.70", quote(combined_rankmap), 156000000, 0.70,
-  "combined_poly156_thres0.72", quote(combined_rankmap), 156000000, 0.72,
-  "combined_poly156_thres0.74", quote(combined_rankmap), 156000000, 0.74,
-  "combined_poly156_thres0.76", quote(combined_rankmap), 156000000, 0.76,
-  "combined_poly156_thres0.78", quote(combined_rankmap), 156000000, 0.78,
-  "combined_poly156_thres0.80", quote(combined_rankmap), 156000000, 0.80,
-  "combined_poly128_thres0.70", quote(combined_rankmap), 128000000, 0.70,
-  "combined_poly128_thres0.72", quote(combined_rankmap), 128000000, 0.72,
-  "combined_poly128_thres0.74", quote(combined_rankmap), 128000000, 0.74,
-  "combined_poly128_thres0.76", quote(combined_rankmap), 128000000, 0.76,
-  "combined_poly128_thres0.78", quote(combined_rankmap), 128000000, 0.78,
-  "combined_poly128_thres0.80", quote(combined_rankmap), 128000000, 0.80,
-  "combined_poly100_thres0.70", quote(combined_rankmap), 100000000, 0.70,
-  "combined_poly100_thres0.72", quote(combined_rankmap), 100000000, 0.72,
-  "combined_poly100_thres0.74", quote(combined_rankmap), 100000000, 0.74,
-  "combined_poly100_thres0.76", quote(combined_rankmap), 100000000, 0.76,
-  "combined_poly100_thres0.78", quote(combined_rankmap), 100000000, 0.78,
-  "combined_poly100_thres0.80", quote(combined_rankmap), 100000000, 0.80,
-)
+scenarios <- generate_scenarios()
+# scenarios <- tibble::tribble(
+#   ~scenario_name, ~zonation_rankmap, ~min_poly, ~threshold,
+#   "sep_layers_poly156_thres0.70", quote(separate_layers_rankmap), 156000000, 0.70,
+#   "sep_layers_poly156_thres0.72", quote(separate_layers_rankmap), 156000000, 0.72,
+#   "sep_layers_poly156_thres0.74", quote(separate_layers_rankmap), 156000000, 0.74,
+#   "sep_layers_poly156_thres0.76", quote(separate_layers_rankmap), 156000000, 0.76,
+#   "sep_layers_poly156_thres0.78", quote(separate_layers_rankmap), 156000000, 0.78,
+#   "sep_layers_poly156_thres0.80", quote(separate_layers_rankmap), 156000000, 0.80,
+#   "sep_layers_poly128_thres0.70", quote(separate_layers_rankmap), 128000000, 0.70,
+#   "sep_layers_poly128_thres0.72", quote(separate_layers_rankmap), 128000000, 0.72,
+#   "sep_layers_poly128_thres0.74", quote(separate_layers_rankmap), 128000000, 0.74,
+#   "sep_layers_poly128_thres0.76", quote(separate_layers_rankmap), 128000000, 0.76,
+#   "sep_layers_poly128_thres0.78", quote(separate_layers_rankmap), 128000000, 0.78,
+#   "sep_layers_poly128_thres0.80", quote(separate_layers_rankmap), 128000000, 0.80,
+#   "sep_layers_poly100_thres0.70", quote(separate_layers_rankmap), 100000000, 0.70,
+#   "sep_layers_poly100_thres0.72", quote(separate_layers_rankmap), 100000000, 0.72,
+#   "sep_layers_poly100_thres0.74", quote(separate_layers_rankmap), 100000000, 0.74,
+#   "sep_layers_poly100_thres0.76", quote(separate_layers_rankmap), 100000000, 0.76,
+#   "sep_layers_poly100_thres0.78", quote(separate_layers_rankmap), 100000000, 0.78,
+#   "sep_layers_poly100_thres0.80", quote(separate_layers_rankmap), 100000000, 0.80,
+#   
+#   "sep_layers_weighted_poly156_thres0.70", quote(separate_layers_weighted_rankmap), 156000000, 0.70,
+#   "sep_layers_weighted_poly156_thres0.72", quote(separate_layers_weighted_rankmap), 156000000, 0.72,
+#   "sep_layers_weighted_poly156_thres0.74", quote(separate_layers_weighted_rankmap), 156000000, 0.74,
+#   "sep_layers_weighted_poly156_thres0.76", quote(separate_layers_weighted_rankmap), 156000000, 0.76,
+#   "sep_layers_weighted_poly156_thres0.78", quote(separate_layers_weighted_rankmap), 156000000, 0.78,
+#   "sep_layers_weighted_poly156_thres0.80", quote(separate_layers_weighted_rankmap), 156000000, 0.80,
+#   "sep_layers_weighted_poly128_thres0.70", quote(separate_layers_weighted_rankmap), 128000000, 0.70,
+#   "sep_layers_weighted_poly128_thres0.72", quote(separate_layers_weighted_rankmap), 128000000, 0.72,
+#   "sep_layers_weighted_poly128_thres0.74", quote(separate_layers_weighted_rankmap), 128000000, 0.74,
+#   "sep_layers_weighted_poly128_thres0.76", quote(separate_layers_weighted_rankmap), 128000000, 0.76,
+#   "sep_layers_weighted_poly128_thres0.78", quote(separate_layers_weighted_rankmap), 128000000, 0.78,
+#   "sep_layers_weighted_poly128_thres0.80", quote(separate_layers_weighted_rankmap), 128000000, 0.80,
+#   "sep_layers_weighted_poly100_thres0.70", quote(separate_layers_weighted_rankmap), 100000000, 0.70,
+#   "sep_layers_weighted_poly100_thres0.72", quote(separate_layers_weighted_rankmap), 100000000, 0.72,
+#   "sep_layers_weighted_poly100_thres0.74", quote(separate_layers_weighted_rankmap), 100000000, 0.74,
+#   "sep_layers_weighted_poly100_thres0.76", quote(separate_layers_weighted_rankmap), 100000000, 0.76,
+#   "sep_layers_weighted_poly100_thres0.78", quote(separate_layers_weighted_rankmap), 100000000, 0.78,
+#   "sep_layers_weighted_poly100_thres0.80", quote(separate_layers_weighted_rankmap), 100000000, 0.80,
+#   
+#   "stacked_layers_poly156_thres0.70", quote(stacked_layers_rankmap), 156000000, 0.70,
+#   "stacked_layers_poly156_thres0.72", quote(stacked_layers_rankmap), 156000000, 0.72,
+#   "stacked_layers_poly156_thres0.74", quote(stacked_layers_rankmap), 156000000, 0.74,
+#   "stacked_layers_poly156_thres0.76", quote(stacked_layers_rankmap), 156000000, 0.76,
+#   "stacked_layers_poly156_thres0.78", quote(stacked_layers_rankmap), 156000000, 0.78,
+#   "stacked_layers_poly156_thres0.80", quote(stacked_layers_rankmap), 156000000, 0.80,
+#   "stacked_layers_poly128_thres0.70", quote(stacked_layers_rankmap), 128000000, 0.70,
+#   "stacked_layers_poly128_thres0.72", quote(stacked_layers_rankmap), 128000000, 0.72,
+#   "stacked_layers_poly128_thres0.74", quote(stacked_layers_rankmap), 128000000, 0.74,
+#   "stacked_layers_poly128_thres0.76", quote(stacked_layers_rankmap), 128000000, 0.76,
+#   "stacked_layers_poly128_thres0.78", quote(stacked_layers_rankmap), 128000000, 0.78,
+#   "stacked_layers_poly128_thres0.80", quote(stacked_layers_rankmap), 128000000, 0.80,
+#   "stacked_layers_poly100_thres0.70", quote(stacked_layers_rankmap), 100000000, 0.70,
+#   "stacked_layers_poly100_thres0.72", quote(stacked_layers_rankmap), 100000000, 0.72,
+#   "stacked_layers_poly100_thres0.74", quote(stacked_layers_rankmap), 100000000, 0.74,
+#   "stacked_layers_poly100_thres0.76", quote(stacked_layers_rankmap), 100000000, 0.76,
+#   "stacked_layers_poly100_thres0.78", quote(stacked_layers_rankmap), 100000000, 0.78,
+#   "stacked_layers_poly100_thres0.80", quote(stacked_layers_rankmap), 100000000, 0.80,
+#   
+#   
+#   "combined_poly156_thres0.70", quote(combined_rankmap), 156000000, 0.70,
+#   "combined_poly156_thres0.72", quote(combined_rankmap), 156000000, 0.72,
+#   "combined_poly156_thres0.74", quote(combined_rankmap), 156000000, 0.74,
+#   "combined_poly156_thres0.76", quote(combined_rankmap), 156000000, 0.76,
+#   "combined_poly156_thres0.78", quote(combined_rankmap), 156000000, 0.78,
+#   "combined_poly156_thres0.80", quote(combined_rankmap), 156000000, 0.80,
+#   "combined_poly128_thres0.70", quote(combined_rankmap), 128000000, 0.70,
+#   "combined_poly128_thres0.72", quote(combined_rankmap), 128000000, 0.72,
+#   "combined_poly128_thres0.74", quote(combined_rankmap), 128000000, 0.74,
+#   "combined_poly128_thres0.76", quote(combined_rankmap), 128000000, 0.76,
+#   "combined_poly128_thres0.78", quote(combined_rankmap), 128000000, 0.78,
+#   "combined_poly128_thres0.80", quote(combined_rankmap), 128000000, 0.80,
+#   "combined_poly100_thres0.70", quote(combined_rankmap), 100000000, 0.70,
+#   "combined_poly100_thres0.72", quote(combined_rankmap), 100000000, 0.72,
+#   "combined_poly100_thres0.74", quote(combined_rankmap), 100000000, 0.74,
+#   "combined_poly100_thres0.76", quote(combined_rankmap), 100000000, 0.76,
+#   "combined_poly100_thres0.78", quote(combined_rankmap), 100000000, 0.78,
+#   "combined_poly100_thres0.80", quote(combined_rankmap), 100000000, 0.80,
+# )
 
 scenario_target_factory <- tar_map(
   values = scenarios,
@@ -357,7 +359,7 @@ list(
   ####### Zonation Rankmaps #################################
 
   tar_terra_rast(
-    name = separate_layers_rankmap,
+    name = separate_layers_rankmap_cazmax,
     command = run_zonation(feature_list = c(mall_masked,
                                             gadw_masked,
                                             nopi_masked,
@@ -365,12 +367,39 @@ list(
                                             nsho_masked,
                                             canv_masked,
                                             redh_masked),
-                           scenario_name = "separate_layers",
+                           scenario_name = "separate_layers_cazmax",
                            zonation_mode = "CAZMAX")
   ),
+  tar_terra_rast(
+    name = separate_layers_rankmap_caz1,
+    command = run_zonation(feature_list = c(mall_masked,
+                                            gadw_masked,
+                                            nopi_masked,
+                                            bwte_masked,
+                                            nsho_masked,
+                                            canv_masked,
+                                            redh_masked),
+                           scenario_name = "separate_layers_caz1",
+                           zonation_mode = "CAZ1")
+  ),
+  tar_terra_rast(
+    name = separate_layers_rankmap_caz2,
+    command = run_zonation(feature_list = c(mall_masked,
+                                            gadw_masked,
+                                            nopi_masked,
+                                            bwte_masked,
+                                            nsho_masked,
+                                            canv_masked,
+                                            redh_masked),
+                           scenario_name = "separate_layers_caz2",
+                           zonation_mode = "CAZ2")
+  ),
+  
+  
+  
   
   tar_terra_rast(
-    name = separate_layers_weighted_rankmap,
+    name = separate_layers_weighted_rankmap_cazmax,
     command = run_zonation(feature_list = c(mall_masked,
                                             gadw_masked,
                                             nopi_masked,
@@ -379,21 +408,75 @@ list(
                                             canv_masked,
                                             redh_masked),
                            feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
-                           scenario_name = "separate_layers_weighted",
+                           scenario_name = "separate_layers_weighted_cazmax",
                            zonation_mode = "CAZMAX")
   ),
+  tar_terra_rast(
+    name = separate_layers_weighted_rankmap_caz1,
+    command = run_zonation(feature_list = c(mall_masked,
+                                            gadw_masked,
+                                            nopi_masked,
+                                            bwte_masked,
+                                            nsho_masked,
+                                            canv_masked,
+                                            redh_masked),
+                           feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
+                           scenario_name = "separate_layers_weighted_caz1",
+                           zonation_mode = "CAZ1")
+  ),
+  tar_terra_rast(
+    name = separate_layers_weighted_rankmap_caz2,
+    command = run_zonation(feature_list = c(mall_masked,
+                                            gadw_masked,
+                                            nopi_masked,
+                                            bwte_masked,
+                                            nsho_masked,
+                                            canv_masked,
+                                            redh_masked),
+                           feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
+                           scenario_name = "separate_layers_weighted_caz2",
+                           zonation_mode = "CAZ2")
+  ),
+  
+  
+  
+  
+  
   
   tar_terra_rast(
-    name = stacked_layers_rankmap,
+    name = stacked_layers_rankmap_cazmax,
     command = run_zonation(feature_list = species_7_masked,
-                           scenario_name = "stacked_layers",
+                           scenario_name = "stacked_layers_cazmax",
                            zonation_mode = "CAZMAX")
+  ),
+  tar_terra_rast(
+    name = stacked_layers_rankmap_caz1,
+    command = run_zonation(feature_list = species_7_masked,
+                           scenario_name = "stacked_layers_caz1",
+                           zonation_mode = "CAZ1")
+  ),
+  tar_terra_rast(
+    name = stacked_layers_rankmap_caz2,
+    command = run_zonation(feature_list = species_7_masked,
+                           scenario_name = "stacked_layers_caz2",
+                           zonation_mode = "CAZ2")
   ),
   
   # and now a Frankenstein version
   tar_terra_rast(
-    name = combined_rankmap,
-    command = max(stacked_layers_rankmap, separate_layers_weighted_rankmap)
+    name = combined_rankmap_cazmax,
+    command = max(stacked_layers_rankmap_cazmax, 
+                  separate_layers_weighted_rankmap_cazmax)
+  ),
+  tar_terra_rast(
+    name = combined_rankmap_caz1,
+    command = max(stacked_layers_rankmap_caz1, 
+                  separate_layers_weighted_rankmap_caz1)
+  ),
+  tar_terra_rast(
+    name = combined_rankmap_caz2,
+    command = max(stacked_layers_rankmap_caz2, 
+                  separate_layers_weighted_rankmap_caz2)
   ),
   
   ####### Summary Statistics for Old TL #################################  
