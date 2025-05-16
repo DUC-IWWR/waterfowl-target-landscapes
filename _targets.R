@@ -444,9 +444,16 @@ list(
                                               scenarios = scenarios)
   ),
   tar_combine(
-    name = province_df,
+    name = province_area_df,
     scenario_target_factory[[4]],
     command = data.frame(!!!.x) |> wrangle_df(type = "vector",
+                                              metric = "population",
+                                              scenarios = scenarios)
+  ),
+  tar_combine(
+    name = pop_by_prov_df,
+    scenario_target_factory[[5]],
+    command = data.frame(!!!.x) |> wrangle_df(type = "matrix",
                                               metric = "population",
                                               scenarios = scenarios)
   )
