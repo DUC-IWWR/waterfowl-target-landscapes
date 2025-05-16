@@ -427,9 +427,9 @@ list(
   
   
   ####### Scenario Runs and Result Wrangling ###############
-  
-  scenario_target_factory,
 
+  scenario_target_factory,
+  
   tar_combine(
     name = area_df,
     scenario_target_factory[[2]],
