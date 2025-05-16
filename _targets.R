@@ -23,6 +23,7 @@ tar_source("src/calculate-tl-population.R")
 tar_source("src/mask-raster.R")
 tar_source("src/calculate-tl-area-province.R")
 tar_source("src/calculate-tl-population-province.R")
+tar_source("src/wrangle-df.R")
 
 ####### Targets ###################################
 
@@ -110,6 +111,61 @@ scenarios <- tibble::tribble(
   "combined_poly100_thres0.76", quote(combined_rankmap), 100000000, 0.76,
   "combined_poly100_thres0.78", quote(combined_rankmap), 100000000, 0.78,
   "combined_poly100_thres0.80", quote(combined_rankmap), 100000000, 0.80,
+)
+
+scenario_target_factory <- tar_map(
+  values = scenarios,
+  names = scenario_name,
+  unlist = FALSE,
+  tar_terra_vect(
+    name = tl,
+    command = generate_target_landscape(rankmap = zonation_rankmap,
+                                        scenario_name = scenario_name,
+                                        threshold = threshold,
+                                        min_poly = min_poly,
+                                        max_hole = 70000000,
+                                        smooth = 8)
+  ),
+  tar_target(
+    name = tl_prop_area,
+    command = calculate_tl_area(target_landscape = tl,
+                                rankmap = zonation_rankmap)
+  ),
+  tar_target(
+    name = tl_prop_population,
+    command = calculate_tl_population(target_landscape = tl,
+                                      species_list = c(mall_masked,
+                                                       gadw_masked,
+                                                       nopi_masked,
+                                                       bwte_masked,
+                                                       nsho_masked,
+                                                       canv_masked,
+                                                       redh_masked))
+  ),
+  tar_target(
+    name = tl_prop_area_province,
+    command = calculate_tl_area_province(target_landscape = tl,
+                                         provinces = provinces,
+                                         rankmap = zonation_rankmap)
+  ),
+  tar_target(
+    name = tl_prop_population_province,
+    command = calculate_tl_population_province(target_landscape = tl,
+                                               species_list = c(mall_masked,
+                                                                gadw_masked,
+                                                                nopi_masked,
+                                                                bwte_masked,
+                                                                nsho_masked,
+                                                                canv_masked,
+                                                                redh_masked,
+                                                                species_7_masked),
+                                               provinces = provinces)
+  ),
+  tar_target(
+    name = tl_prop_total_population,
+    command = calculate_tl_population(target_landscape = tl,
+                                      species_list = c(species_7_masked))
+  )
 )
 
 
@@ -337,61 +393,8 @@ list(
     command = max(stacked_layers_rankmap, separate_layers_weighted_rankmap)
   ),
   
-  ####### Scenario Runs #################################
-
-  tar_map(
-    values = scenarios,
-    names = scenario_name,
-    tar_terra_vect(
-      name = tl,
-      command = generate_target_landscape(rankmap = zonation_rankmap,
-                                          scenario_name = scenario_name,
-                                          threshold = threshold,
-                                          min_poly = min_poly,
-                                          max_hole = 70000000,
-                                          smooth = 8)
-    ),
-    tar_target(
-      name = tl_prop_area,
-      command = calculate_tl_area(target_landscape = tl,
-                                  rankmap = zonation_rankmap)
-    ),
-    tar_target(
-      name = tl_prop_population,
-      command = calculate_tl_population(target_landscape = tl,
-                                        species_list = c(mall_masked,
-                                                   gadw_masked,
-                                                   nopi_masked,
-                                                   bwte_masked,
-                                                   nsho_masked,
-                                                   canv_masked,
-                                                   redh_masked))
-    ),
-    tar_target(
-      name = tl_prop_area_province,
-      command = calculate_tl_area_province(target_landscape = tl,
-                                           provinces = provinces,
-                                           rankmap = zonation_rankmap)
-    ),
-    tar_target(
-      name = tl_prop_population_province,
-      command = calculate_tl_population_province(target_landscape = tl,
-                                                 species_list = c(mall_masked,
-                                                             gadw_masked,
-                                                             nopi_masked,
-                                                             bwte_masked,
-                                                             nsho_masked,
-                                                             canv_masked,
-                                                             redh_masked,
-                                                             species_7_masked),
-                                                 provinces = provinces)
-    ),
-    tar_target(
-      name = tl_prop_total_population,
-      command = calculate_tl_population(target_landscape = tl,
-                                        species_list = c(species_7_masked))
-    )
-  ),
+  ####### Summary Statistics for Old TL #################################  
+  
   tar_target(
     name = dss_v2_prop_area,
     command = calculate_tl_area(target_landscape = aggregate(tl_old_projected,
@@ -417,5 +420,24 @@ list(
                                                                       dissolve = TRUE),
                                          provinces = provinces,
                                          rankmap = rast(dss_v2_masked))
-  )
+  ),
+  
+  scenario_target_factory,
+
+    tar_combine(
+      name = area_df,
+      scenario_target_factory[[2]],
+      command = data.frame(!!!.x) |> wrangle_df(metric = "area",
+                                                scenarios = scenarios)
+    )
 )
+  
+  
+  
+  
+  
+  
+  ####### Scenario Runs #################################
+
+ 
+
