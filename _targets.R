@@ -548,7 +548,7 @@ list(
     command = plot_sp_vs_phjv_prop(population_df = population_df,
                                    area_df = area_df,
                                    phjv = phjv,
-                                   crs = crs(combined_rankmap))
+                                   crs = crs(combined_rankmap_cazmax))
   )
 )
   
