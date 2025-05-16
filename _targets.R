@@ -24,12 +24,13 @@ tar_source("src/mask-raster.R")
 tar_source("src/calculate-tl-area-province.R")
 tar_source("src/calculate-tl-population-province.R")
 tar_source("src/wrangle-df.R")
+tar_source("src/plotting-functions.R")
 
 ####### Targets ###################################
 
 # Set target options:
 tar_option_set(
-  packages = c("terra", "smoothr"),
+  packages = c("terra", "smoothr", "ggplot2", "tidyr"),
   controller = crew_controller_local(workers = 10)
 )
 
@@ -425,7 +426,7 @@ list(
   ),
   
   
-  ####### Scenario Runs #################################
+  ####### Scenario Runs and Result Wrangling ###############
   
   scenario_target_factory,
 
@@ -456,6 +457,15 @@ list(
     command = data.frame(!!!.x) |> wrangle_df(type = "matrix",
                                               metric = "population",
                                               scenarios = scenarios)
+  ),
+  
+  ####### Post-hoc Plotting ###############
+  tar_target(
+    name = sp_vs_phjv_prop_plot,
+    command = plot_sp_vs_phjv_prop(population_df = population_df,
+                                   area_df = area_df,
+                                   phjv = phjv,
+                                   crs = crs(combined_rankmap))
   )
 )
   
