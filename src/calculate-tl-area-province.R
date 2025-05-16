@@ -16,6 +16,6 @@ calculate_tl_area_province <- function(target_landscape = NULL,
     crs(tl_reduced) <- crs(rankmap)
     prop_area[i] <- expanse(tl_reduced, unit = "km") / total_area
   }
-  
+  names(prop_area) <- provs
   return(prop_area)
 }

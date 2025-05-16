@@ -1,6 +1,7 @@
 calculate_tl_population_province <- function(target_landscape = NULL,
                                              species_list = NULL,
-                                             provinces = NULL)
+                                             provinces = NULL,
+                                             species_names = NULL)
 {
   species <- lapply(species_list, rast)
   
@@ -26,6 +27,7 @@ calculate_tl_population_province <- function(target_landscape = NULL,
       species_pops_prov[j,i] <- sum(pop_df[,2], na.rm = TRUE) / species_total_pops[j]
     }
   }
-  
+  rownames(species_pops_prov) <- species_names
+  colnames(species_pops_prov) <- provs
   return(species_pops_prov)
 }

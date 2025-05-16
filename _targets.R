@@ -140,7 +140,11 @@ scenario_target_factory <- tar_map(
                                                        bwte_masked,
                                                        nsho_masked,
                                                        canv_masked,
-                                                       redh_masked))
+                                                       redh_masked,
+                                                       species_7_masked),
+                                      species_names = c("MALL", "GADW", "NOPI",
+                                                "BWTE", "NSHO", "CANV",
+                                                "REDH", "ALL"))
   ),
   tar_target(
     name = tl_prop_area_province,
@@ -159,12 +163,10 @@ scenario_target_factory <- tar_map(
                                                                 canv_masked,
                                                                 redh_masked,
                                                                 species_7_masked),
-                                               provinces = provinces)
-  ),
-  tar_target(
-    name = tl_prop_total_population,
-    command = calculate_tl_population(target_landscape = tl,
-                                      species_list = c(species_7_masked))
+                                               provinces = provinces,
+                                               species_names = c("MALL", "GADW", "NOPI",
+                                                                 "BWTE", "NSHO", "CANV",
+                                                                 "REDH", "ALL"))
   )
 )
 
@@ -427,12 +429,12 @@ list(
   
   scenario_target_factory,
 
-    tar_combine(
-      name = area_df,
-      scenario_target_factory[[2]],
-      command = data.frame(!!!.x) |> wrangle_df(metric = "area",
-                                                scenarios = scenarios)
-    )
+  tar_combine(
+    name = area_df,
+    scenario_target_factory[[2]],
+    command = data.frame(!!!.x) |> wrangle_df(metric = "area",
+                                              scenarios = scenarios)
+  )
 )
   
   
