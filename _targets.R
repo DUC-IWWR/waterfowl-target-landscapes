@@ -432,7 +432,15 @@ list(
   tar_combine(
     name = area_df,
     scenario_target_factory[[2]],
-    command = data.frame(!!!.x) |> wrangle_df(metric = "area",
+    command = data.frame(!!!.x) |> wrangle_df(type = "scalar",
+                                              metric = "area",
+                                              scenarios = scenarios)
+  ),
+  tar_combine(
+    name = population_df,
+    scenario_target_factory[[3]],
+    command = data.frame(!!!.x) |> wrangle_df(type = "vector",
+                                              metric = "population",
                                               scenarios = scenarios)
   )
 )
