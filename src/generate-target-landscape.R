@@ -24,7 +24,7 @@ generate_target_landscape <- function(rankmap = NULL,
   }
   
   file = paste0(output_dir, "/TL_", threshold, ".shp")
-  writeVector(x = tl, filename = file, filetype = "ESRI Shapefile", overwrite = TRUE)
+  terra::writeVector(x = tl, filename = file, filetype = "ESRI Shapefile", overwrite = TRUE)
 
   return(tl)
 }
