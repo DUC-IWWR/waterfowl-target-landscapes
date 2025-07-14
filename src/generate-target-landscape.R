@@ -12,10 +12,14 @@ generate_target_landscape <- function(rankmap = NULL,
   tl <- terra::classify(x = rankmap, rcl = rcl) |>
     terra::as.polygons(aggregate = T) |>
     smoothr::drop_crumbs(threshold = min_poly) |>
-    smoothr::fill_holes(threshold = max_hole) |>
-    smoothr::smooth(method = "ksmooth", smoothness = smooth)
+    smoothr::smooth(method = "ksmooth", smoothness = smooth) |>
+    smoothr::fill_holes(threshold = max_hole)
+
   
   terra::crs(tl) <- terra::crs(rankmap)
+  tl <- tl[which(tl$rankmap == 1), ]
+  tl <- terra::disagg(tl)
+  tl$id <- 1:nrow(tl)
   
   output_dir <- paste0("output/target-landscapes/", scenario_name)
   if (!dir.exists(file.path(output_dir)))

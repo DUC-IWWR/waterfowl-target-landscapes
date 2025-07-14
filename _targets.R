@@ -48,7 +48,7 @@ scenario_target_factory <- tar_map(
                                         threshold = threshold,
                                         min_poly = min_poly,
                                         max_hole = 70000000,
-                                        smooth = 8)
+                                        smooth = 30)
   ),
   tar_target(
     name = tl_prop_area,
