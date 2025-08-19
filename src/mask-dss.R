@@ -2,7 +2,7 @@
 #' waterfowl rasters. We need to mask to JUST the PHJV area, then mask out
 #' rivers and lakes
 
-mask_raster <- function(raster_file = NULL,
+mask_dss <- function(raster_file = NULL,
                         phjv = NULL,
                         lakes = NULL,
                         rivers = NULL)
