@@ -3,7 +3,7 @@
 # Waterfowl Target Landscapes
 # _targets.R
 # Created April 2025
-# Last Updated May 2025
+# Last Updated August 2025
 
 ####### Import Libraries and External Files #######
 
@@ -13,6 +13,7 @@ library(geotargets)
 library(tibble)
 library(crew)
 
+tar_source("src/target-factories/generate-scenario-target-factory.R")
 tar_source("src/reproject-raster.R")
 tar_source("src/run-zonation.R")
 tar_source("src/stack-rasters.R")
@@ -37,67 +38,12 @@ tar_option_set(
 
 scenarios <- generate_scenarios()
 
-scenario_target_factory <- tar_map(
-  values = scenarios,
-  names = scenario_name,
-  unlist = FALSE,
-  tar_terra_vect(
-    name = tl,
-    command = generate_target_landscape(rankmap = zonation_rankmap,
-                                        scenario_name = scenario_name,
-                                        threshold = threshold,
-                                        min_poly = min_poly,
-                                        max_hole = 70000000,
-                                        smooth = 30)
-  ),
-  tar_target(
-    name = tl_prop_area,
-    command = calculate_tl_area(target_landscape = tl,
-                                rankmap = zonation_rankmap)
-  ),
-  tar_target(
-    name = tl_prop_population,
-    command = calculate_tl_population(target_landscape = tl,
-                                      species_list = c(mall_masked,
-                                                       gadw_masked,
-                                                       nopi_masked,
-                                                       bwte_masked,
-                                                       nsho_masked,
-                                                       canv_masked,
-                                                       redh_masked,
-                                                       species_7_masked),
-                                      species_names = c("MALL", "GADW", "NOPI",
-                                                "BWTE", "NSHO", "CANV",
-                                                "REDH", "ALL"))
-  ),
-  tar_target(
-    name = tl_prop_area_province,
-    command = calculate_tl_area_province(target_landscape = tl,
-                                         provinces = provinces,
-                                         rankmap = zonation_rankmap)
-  ),
-  tar_target(
-    name = tl_prop_population_province,
-    command = calculate_tl_population_province(target_landscape = tl,
-                                               species_list = c(mall_masked,
-                                                                gadw_masked,
-                                                                nopi_masked,
-                                                                bwte_masked,
-                                                                nsho_masked,
-                                                                canv_masked,
-                                                                redh_masked,
-                                                                species_7_masked),
-                                               provinces = provinces,
-                                               species_names = c("MALL", "GADW", "NOPI",
-                                                                 "BWTE", "NSHO", "CANV",
-                                                                 "REDH", "ALL"))
-  )
-)
-
+scenario_target_factory <- generate_scenario_target_factory(scenarios = scenarios)
 
 list(
   
   ####### Raw Rasters and Shapefiles ####################
+  
   tar_target(
     name = species_7_stacked,
     "data/raw/rasters/7species_perSQK_CopyRaster.tif",
@@ -156,6 +102,14 @@ list(
   tar_terra_vect(
     name = provinces,
     vect("data/raw/Provinces_projected/Provinces_projected.shp")
+  ),
+  tar_terra_vect(
+    name = lakes,
+    vect("data/raw/NA Lakes and Rivers/North America Lakes.shp")
+  ),
+  tar_terra_vect(
+    name = rivers_500m_buffer,
+    vect("data/raw/NA Lakes and Rivers/North America Rivers 500mBuffer.shp")
   ),
 
   
@@ -219,6 +173,12 @@ list(
     name = tl_old_projected,
     command = project(tl_old, rast(gadw_raw_raster))
   ),
+  tar_terra_vect(
+    name = lakes_projected,
+    command = project(lakes, rast(gadw_raw_raster))
+  ),
+  tar_terra_vect(rivers_500m_buffer_projected,
+                 command = project(rivers_500m_buffer, rast(gadw_raw_raster))),
   
   ####### Mask Rasters ###################################
   
