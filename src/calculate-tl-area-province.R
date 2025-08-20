@@ -1,10 +1,10 @@
 calculate_tl_area_province <- function(target_landscape = NULL,
                                        provinces = NULL,
-                                       rankmap = NULL)
+                                       target_crs = NULL)
 {
-  crs(target_landscape) <- crs(rankmap)
-  crs(provinces) <- crs(rankmap)
-  total_area <- expanse(target_landscape, unit = "km")
+  crs(target_landscape) <- target_crs
+  crs(provinces) <- target_crs
+  total_area <- sum(expanse(target_landscape, unit = "km"))
   
   provs <- c("MB", "SK", "AB")
   prop_area <- vector(mode = "numeric", length = length(provs))
@@ -13,8 +13,8 @@ calculate_tl_area_province <- function(target_landscape = NULL,
   {
     tl_reduced <- intersect(target_landscape,
                             provinces[which(provinces$PROV == provs[i]), ])
-    crs(tl_reduced) <- crs(rankmap)
-    prop_area[i] <- expanse(tl_reduced, unit = "km") / total_area
+    crs(tl_reduced) <- target_crs
+    prop_area[i] <- sum(expanse(tl_reduced, unit = "km")) / total_area
   }
   names(prop_area) <- provs
   return(prop_area)

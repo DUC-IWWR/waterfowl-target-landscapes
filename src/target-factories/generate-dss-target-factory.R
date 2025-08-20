@@ -31,7 +31,7 @@ generate_dss_target_factory <- function()
     tar_target(
       name = dss_snapped,
       command = snap_density_raster(raster_file = dss_raw,
-                                    ref = target_crs),
+                                    ref = target_crs_rast),
       format = "file"
     ),
     
@@ -40,7 +40,8 @@ generate_dss_target_factory <- function()
       command = mask_dss(raster_file = dss_snapped,
                          phjv = phjv[which(phjv$CA_REGION == "PPR"),],
                          lakes = lakes,
-                         rivers = rivers_500m_buffer)
+                         rivers = rivers_500m_buffer,
+                         target_crs = target_crs)
     )
   )
   

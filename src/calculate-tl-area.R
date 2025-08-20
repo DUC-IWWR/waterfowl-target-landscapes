@@ -1,6 +1,6 @@
 calculate_tl_area <- function(target_landscape = NULL,
-                              rankmap = NULL)
+                              target_crs = NULL)
 {
-  crs(target_landscape) <- crs(rankmap)
-  return(expanse(target_landscape, unit = "km"))
+  crs(target_landscape) <- target_crs
+  return(sum(expanse(target_landscape, unit = "km")))
 }

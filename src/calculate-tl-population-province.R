@@ -1,12 +1,13 @@
 calculate_tl_population_province <- function(target_landscape = NULL,
                                              species_list = NULL,
                                              provinces = NULL,
-                                             species_names = NULL)
+                                             species_names = NULL,
+                                             target_crs = NULL)
 {
   species <- lapply(species_list, terra::rast)
   
-  crs(target_landscape) <- terra::crs(species[[1]])
-  crs(provinces) <- terra::crs(species[[1]])
+  crs(target_landscape) <- target_crs
+  crs(provinces) <- target_crs
   
   provs <- c("MB", "SK", "AB")
   species_pops_prov <- matrix(data = 0, 

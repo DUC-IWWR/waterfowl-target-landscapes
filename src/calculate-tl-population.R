@@ -1,6 +1,7 @@
 calculate_tl_population <- function(target_landscape = NULL,
                                     species_list = NULL,
-                                    species_names = NULL)
+                                    species_names = NULL,
+                                    target_crs = NULL)
 {
   species <- lapply(species_list, terra::rast)
   population <- vector(mode = "numeric", length = length(species))
@@ -9,7 +10,7 @@ calculate_tl_population <- function(target_landscape = NULL,
   {
     if (i == 1)
     {
-      crs(target_landscape) <- crs(species[[i]])
+      crs(target_landscape) <- target_crs
     }
     
     species[[i]] <- species[[i]] * 0.16

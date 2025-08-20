@@ -51,50 +51,19 @@ list(
   #' as a variable. This way the GADW raster does not rely on itself
   #' already being loaded, and the other DSS rasters do not rely on GADW being 
   #' loaded. This can allow for a DSS target factory.
+  tar_terra_rast(
+    name = target_crs_rast,
+    rast("data/raw/target_crs_raster.tif")
+  ),
   tar_target(
     name = target_crs,
-    command = "PROJCRS[\"Canada_Albers_Equal_Area_Conic\",\n    
-    BASEGEOGCRS[\"NAD83\",\n        
-    DATUM[\"North American Datum 1983\",\n            
-    ELLIPSOID[\"GRS 1980\",6378137,298.257222101004,\n                
-    LENGTHUNIT[\"metre\",1]]],\n        
-    PRIMEM[\"Greenwich\",0,\n            
-    ANGLEUNIT[\"degree\",0.0174532925199433]],\n        
-    ID[\"EPSG\",4269]],\n    
-    CONVERSION[\"Albers Equal Area\",\n        
-    METHOD[\"Albers Equal Area\",\n            
-    ID[\"EPSG\",9822]],\n        
-    PARAMETER[\"Latitude of false origin\",40,\n            
-    ANGLEUNIT[\"degree\",0.0174532925199433],\n            
-    ID[\"EPSG\",8821]],\n        
-    PARAMETER[\"Longitude of false origin\",-105,\n            
-    ANGLEUNIT[\"degree\",0.0174532925199433],\n            
-    ID[\"EPSG\",8822]],\n        
-    PARAMETER[\"Latitude of 1st standard parallel\",50,\n            
-    ANGLEUNIT[\"degree\",0.0174532925199433],\n            
-    ID[\"EPSG\",8823]],\n        
-    PARAMETER[\"Latitude of 2nd standard parallel\",70,\n            
-    ANGLEUNIT[\"degree\",0.0174532925199433],\n            
-    ID[\"EPSG\",8824]],\n        
-    PARAMETER[\"Easting at false origin\",0,\n            
-    LENGTHUNIT[\"metre\",1],\n            
-    ID[\"EPSG\",8826]],\n        
-    PARAMETER[\"Northing at false origin\",0,\n            
-    LENGTHUNIT[\"metre\",1],\n            
-    ID[\"EPSG\",8827]]],\n    
-    CS[Cartesian,2],\n        
-    AXIS[\"easting\",east,\n            
-    ORDER[1],\n            
-    LENGTHUNIT[\"metre\",1,\n                
-    ID[\"EPSG\",9001]]],\n        
-    AXIS[\"northing\",north,\n            
-    ORDER[2],\n            
-    LENGTHUNIT[\"metre\",1,\n                
-    ID[\"EPSG\",9001]]]]"
+    command = crs(target_crs_rast)
   ),
-
+  
+  # Load in all the DSS layers, snap together, and mask them
   dss_target_factory,
 
+  # Load in all other necessary rasters and vector layers
   tar_terra_vect(
     name = tl_old,
     vect("data/raw/target-landscapes-previous/PHJV_WaterfowlTargetLandscapes.shp") |>
@@ -113,12 +82,14 @@ list(
   tar_terra_vect(
     name = lakes,
     vect("data/raw/NA Lakes and Rivers/North America Lakes.shp") |>
-      project(y = target_crs)
+      project(y = target_crs) |>
+      crop(ext(target_crs_rast))
   ),
   tar_terra_vect(
     name = rivers_500m_buffer,
     vect("data/raw/NA Lakes and Rivers/North America Rivers 500mBuffer.shp") |>
-      project(y = target_crs)
+      project(y = target_crs) |>
+      crop(ext(target_crs_rast))
   ),
   
   ####### Zonation Rankmaps #################################
@@ -135,33 +106,6 @@ list(
                            scenario_name = "separate_layers_cazmax",
                            zonation_mode = "CAZMAX")
   ),
-  tar_terra_rast(
-    name = separate_layers_rankmap_caz1,
-    command = run_zonation(feature_list = c(dss_masked_mall,
-                                            dss_masked_gadw,
-                                            dss_masked_nopi,
-                                            dss_masked_bwte,
-                                            dss_masked_nsho,
-                                            dss_masked_canv,
-                                            dss_masked_redh),
-                           scenario_name = "separate_layers_caz1",
-                           zonation_mode = "CAZ1")
-  ),
-  tar_terra_rast(
-    name = separate_layers_rankmap_caz2,
-    command = run_zonation(feature_list = c(dss_masked_mall,
-                                            dss_masked_gadw,
-                                            dss_masked_nopi,
-                                            dss_masked_bwte,
-                                            dss_masked_nsho,
-                                            dss_masked_canv,
-                                            dss_masked_redh),
-                           scenario_name = "separate_layers_caz2",
-                           zonation_mode = "CAZ2")
-  ),
-  
-  
-  
   
   tar_terra_rast(
     name = separate_layers_weighted_rankmap_cazmax,
@@ -177,49 +121,10 @@ list(
                            zonation_mode = "CAZMAX")
   ),
   tar_terra_rast(
-    name = separate_layers_weighted_rankmap_caz1,
-    command = run_zonation(feature_list = c(dss_masked_mall,
-                                            dss_masked_gadw,
-                                            dss_masked_nopi,
-                                            dss_masked_bwte,
-                                            dss_masked_nsho,
-                                            dss_masked_canv,
-                                            dss_masked_redh),
-                           feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
-                           scenario_name = "separate_layers_weighted_caz1",
-                           zonation_mode = "CAZ1")
-  ),
-  tar_terra_rast(
-    name = separate_layers_weighted_rankmap_caz2,
-    command = run_zonation(feature_list = c(dss_masked_mall,
-                                            dss_masked_gadw,
-                                            dss_masked_nopi,
-                                            dss_masked_bwte,
-                                            dss_masked_nsho,
-                                            dss_masked_canv,
-                                            dss_masked_redh),
-                           feature_weights = c(1.0,1.0,2.0,1.0,1.0,1.0,1.0),
-                           scenario_name = "separate_layers_weighted_caz2",
-                           zonation_mode = "CAZ2")
-  ),
-  
-  tar_terra_rast(
     name = stacked_layers_rankmap_cazmax,
     command = run_zonation(feature_list = dss_masked_stacked_v3,
                            scenario_name = "stacked_layers_cazmax",
                            zonation_mode = "CAZMAX")
-  ),
-  tar_terra_rast(
-    name = stacked_layers_rankmap_caz1,
-    command = run_zonation(feature_list = dss_masked_stacked_v3,
-                           scenario_name = "stacked_layers_caz1",
-                           zonation_mode = "CAZ1")
-  ),
-  tar_terra_rast(
-    name = stacked_layers_rankmap_caz2,
-    command = run_zonation(feature_list = dss_masked_stacked_v3,
-                           scenario_name = "stacked_layers_caz2",
-                           zonation_mode = "CAZ2")
   ),
   
   # and now a Frankenstein version
@@ -228,44 +133,36 @@ list(
     command = max(stacked_layers_rankmap_cazmax, 
                   separate_layers_weighted_rankmap_cazmax)
   ),
-  tar_terra_rast(
-    name = combined_rankmap_caz1,
-    command = max(stacked_layers_rankmap_caz1, 
-                  separate_layers_weighted_rankmap_caz1)
-  ),
-  tar_terra_rast(
-    name = combined_rankmap_caz2,
-    command = max(stacked_layers_rankmap_caz2, 
-                  separate_layers_weighted_rankmap_caz2)
-  ),
-  
+
   ####### Summary Statistics for Old TL #################################  
   
   tar_target(
     name = dss_v2_prop_area,
     command = calculate_tl_area(target_landscape = aggregate(tl_old,
                                                              dissolve = TRUE),
-                                rankmap = rast(dss_masked_stacked_v2))
+                                target_crs = target_crs)
   ),
   tar_target(
     name = dss_v2_prop_population,
     command = calculate_tl_population(target_landscape = aggregate(tl_old,
                                                                    dissolve = TRUE),
-                                      species_list = c(dss_masked_stacked_v2))
+                                      species_list = c(dss_masked_stacked_v2),
+                                      target_crs = target_crs)
   ),
   tar_target(
     name = dss_v2_prop_population_province,
     command = calculate_tl_population_province(target_landscape = aggregate(tl_old,
                                                                             dissolve = TRUE),
                                                species_list = c(dss_masked_stacked_v2),
-                                               provinces = provinces)
+                                               provinces = provinces,
+                                               target_crs = target_crs)
   ),
   tar_target(
     name = dss_v2_prop_area_province,
     command = calculate_tl_area_province(target_landscape = aggregate(tl_old,
                                                                       dissolve = TRUE),
                                          provinces = provinces,
-                                         rankmap = rast(dss_masked_stacked_v2))
+                                         target_crs = target_crs)
   ),
   
   
@@ -301,14 +198,14 @@ list(
                                               metric = "population",
                                               scenarios = scenarios)
   ),
-  
-  ####### Post-hoc Plotting ###############
+
+  ###### Post-hoc Plotting ###############
   tar_target(
     name = sp_vs_phjv_prop_plot,
     command = plot_sp_vs_phjv_prop(population_df = population_df,
                                    area_df = area_df,
                                    phjv = phjv,
-                                   crs = crs(combined_rankmap_cazmax))
+                                   crs = target_crs)
   )
 )
   

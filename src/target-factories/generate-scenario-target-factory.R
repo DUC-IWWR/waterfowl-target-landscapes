@@ -16,7 +16,7 @@ generate_scenario_target_factory <- function(scenarios = scenarios)
     tar_target(
       name = tl_prop_area,
       command = calculate_tl_area(target_landscape = tl,
-                                  rankmap = zonation_rankmap)
+                                  target_crs = target_crs)
     ),
     tar_target(
       name = tl_prop_population,
@@ -31,13 +31,14 @@ generate_scenario_target_factory <- function(scenarios = scenarios)
                                                          dss_masked_stacked_v3),
                                         species_names = c("MALL", "GADW", "NOPI",
                                                           "BWTE", "NSHO", "CANV",
-                                                          "REDH", "ALL"))
+                                                          "REDH", "ALL"),
+                                        target_crs = target_crs)
     ),
     tar_target(
       name = tl_prop_area_province,
       command = calculate_tl_area_province(target_landscape = tl,
                                            provinces = provinces,
-                                           rankmap = zonation_rankmap)
+                                           target_crs = target_crs)
     ),
     tar_target(
       name = tl_prop_population_province,
@@ -53,7 +54,8 @@ generate_scenario_target_factory <- function(scenarios = scenarios)
                                                  provinces = provinces,
                                                  species_names = c("MALL", "GADW", "NOPI",
                                                                    "BWTE", "NSHO", "CANV",
-                                                                   "REDH", "ALL"))
+                                                                   "REDH", "ALL"),
+                                                 target_crs = target_crs)
     )
   )
   
